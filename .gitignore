@@ -12,8 +12,8 @@
 /log/*
 /share/dumps/*
 /todos
-Data-Seek-*
-Data-Seek-*/*
+Emailesque-*
+Emailesque-*/*
 Build
 Build.bat
 MANIFEST.bak

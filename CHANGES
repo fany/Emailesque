@@ -1,6 +1,12 @@
 Changelog for Emailesque
 
-1.200008 2014-08-21T08:56:22
+1.21 2015-04-01T20:07:38
+ - Refactored using Data::Object for better OO.
+ - Fix pod fix
+ - Fixes for pod
+
+1.200008 2014-08-21T08:56:25
+ - v1.200008
  - Updated POD, README, and Makefile.
  - Fix incorrect use of return-path header for directing replies
 

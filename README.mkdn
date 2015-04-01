@@ -2,13 +2,11 @@
 
 Emailesque - Lightweight To-The-Point Email
 
+[![Build Status](https://travis-ci.org/alnewkirk/Emailesque.png?branch=master)](https://travis-ci.org/alnewkirk/Emailesque)
+
 # VERSION
 
-version 1.200008
-
-# STATUS
-
-<a href="https://travis-ci.org/alnewkirk/Emailesque"><img src="https://travis-ci.org/alnewkirk/Emailesque.svg?branch=master"></a>
+version 1.21
 
 # SYNOPSIS
 
@@ -25,21 +23,21 @@ version 1.200008
 
 Emailesque provides an easy way of handling text or html email messages
 with or without attachments. Simply define how you wish to send the email,
-thencall the email keyword passing the necessary parameters as outlined above.
+then call the email keyword passing the necessary parameters as outlined above.
 This module is basically a wrapper around the email interface Email::Stuffer.
 The following is an example of the object-oriented interface:
 
     use Emailesque;
 
-    Emailesque->new->send({
+    my $email = Emailesque->new({
         to      => '...',
         from    => '...',
         subject => '...',
         message => '...',
-        attach  => [
-            'filename' => '/path/to/file'
-        ]
+        files   => ['/path/to/file/1', '/path/to/file/2'],
     });
+
+    $email->send;
 
 The Emailesque object-oriented interface is designed to accept parameters at
 instatiation and when calling the send method. This allows you to build-up an
@@ -102,9 +100,9 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     reply_to => 'other_email@website.com'
 
     # attach files to the email
-    # set attechment name to undef to use the filename
+    # set attachment name to undef to use the filename
     attach => [
-        $filepath => $filename,
+        $filepath => undef,
     ]
 
     # send additional (specialized) headers
@@ -121,7 +119,7 @@ the hashref of arguments to the keyword, constructor and/or the send method:
             subject => '...',
             message => $msg,
             attach  => [
-                '/path/to/file' => 'filename'
+                'filename' => '/path/to/file'
             ]
         };
 
@@ -196,6 +194,15 @@ the hashref of arguments to the keyword, constructor and/or the send method:
 # AUTHOR
 
 Al Newkirk <anewkirk@ana.io>
+
+# CONTRIBUTORS
+
+- Al Newkirk & Associates <github@alnewkirk.com>
+- Al Newkirk <root@alnewkirk.com>
+- Al Newkirk <we@ana.im>
+- Andrew Beverley <a.beverley@ctrlo.com>
+- Eric Johnson <eric.git@iijo.org>
+- root <root@megatron.(none)>
 
 # COPYRIGHT AND LICENSE
 
