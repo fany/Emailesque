@@ -1,6 +1,7 @@
 Changelog for Emailesque
 
-1.21 2015-04-01T20:36:10
+1.21 2015-04-01T20:45:11
+ - Fix declaration warning.
  - Updated dist.ini.
  - Updated build.
  - Refactored using Data::Object for better OO.
