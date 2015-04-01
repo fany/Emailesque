@@ -226,8 +226,9 @@ sub prepare_address {
 sub prepare_package {
     my ($self, $options, @arguments) = @_;
 
+    $options = $self->merge($options) if $options;
+
     my $stuff   = Email::Stuffer->new;
-    my $options = $self->merge($options) if $options;
     my $email   = $self->new($options->data // {});
 
     # initialize headers
