@@ -16,7 +16,7 @@ sub cant_email {
 }
 
 ok ! eval { email() } && $@, 'email with no args dies';
-ok ! eval { Emailesque->new->send() } && $@, 'oo email with no args dies';
+ok ! eval { Emailesque->new } && $@, 'oo email with no args dies';
 
 can_email {
     to      => 'recipient@nowhere.example.net',

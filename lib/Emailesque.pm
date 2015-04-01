@@ -1,22 +1,385 @@
 # ABSTRACT: Lightweight To-The-Point Email
-
 package Emailesque;
 
-BEGIN {
-    use Exporter();
-    use vars qw(@ISA @EXPORT @EXPORT_OK);
-    @ISA    = qw( Exporter );
-    @EXPORT = qw(email);
-}
-
+use Carp;
 use File::Slurp;
-use Hash::Merge;
 use Email::AddressParser;
 use Email::Sender::Transport::Sendmail;
 use Email::Sender::Transport::SMTP;
 use Email::Stuffer;
 
+use Exporter 'import';
+our @EXPORT = qw(email);
+
+use parent 'Data::Object::Hash';
+
 # VERSION
+
+my %headers = map {
+    my $name = lc $_;
+       $name =~ s/\W+/_/g;
+       $name => $_;
+}
+my @headers = (
+    'Alternate-Recipient',
+    'Apparently-To',
+    'Approved',
+    'Approved-By',
+    'Autoforwarded',
+    'Auto-Forwarded',
+    'Bcc',
+    'Cache-Post-Path',
+    'Cc',
+    'Comments',
+    'Content-Alias',
+    'Content-Alternative',
+    'Content-Base',
+    'Content-Class',
+    'Content-Conversion',
+    'Content-Description',
+    'Content-Disposition',
+    'Content-Features',
+    'Content-ID',
+    'Content-Identifier',
+    'Content-Language',
+    'Content-Length',
+    'Content-Location',
+    'Content-MD5',
+    'Content-Return',
+    'Content-SGML-Entity',
+    'Content-Transfer-Encoding',
+    'Content-Type',
+    'Control',
+    'Conversion',
+    'Conversion-With-Loss',
+    'Date',
+    'Delivered-To',
+    'Delivery-Date',
+    'Disclose-Recipients',
+    'Disposition-Notification-Options',
+    'Disposition-Notification-To',
+    'Distribution',
+    'Encoding',
+    'Errors-To',
+    'Envelope-ID',
+    'Expires',
+    'Expiry-Date',
+    'Fcc',
+    'Followup-To',
+    'For-Approval',
+    'For-Comment',
+    'For-Handling',
+    'From',
+    'Generate-Delivery-Report',
+    'Importance',
+    'In-Reply-To',
+    'Incomplete-Copy',
+    'Injector-Info',
+    'Keywords',
+    'Language',
+    'Lines',
+    'List-Archive',
+    'List-Digest',
+    'List-ID',
+    'List-Owner',
+    'List-Post',
+    'List-Software',
+    'List-Subscribe',
+    'List-Unsubscribe',
+    'List-URL',
+    'Mail-Copies-To',
+    'Mail-Reply-Requested-By',
+    'Mail-System-Version',
+    'Mailer',
+    'Mailing-List',
+    'Message-ID',
+    'Message-Type',
+    'MIME-Version',
+    'Newsgroups',
+    'NNTP-Posting-Date',
+    'NNTP-Posting-Host',
+    'NNTP-Posting-Time',
+    'NNTP-Proxy-Relay',
+    'Obsoletes',
+    'Old-Date',
+    'Old-X-Envelope-From',
+    'Old-X-Envelope-To',
+    'Organisation',
+    'Organization',
+    'Original-Encoded-Information-Types',
+    'Original-Recipient',
+    'Originating-Client',
+    'Originator',
+    'Originator-Info',
+    'Path',
+    'Phone',
+    'Posted-To',
+    'Precedence',
+    'Prevent-NonDelivery-Report',
+    'Priority',
+    'Read-Receipt-To',
+    'Received',
+    'References',
+    'Replaces',
+    'Reply-By',
+    'Reply-To',
+    'Resent-bcc',
+    'Resent-cc',
+    'Resent-Date',
+    'Resent-From',
+    'Resent-Message-ID',
+    'Resent-Reply-To',
+    'Resent-Sender',
+    'Resent-Subject',
+    'Resent-To',
+    'Return-Path',
+    'Return-Receipt-Requested',
+    'Return-Receipt-To',
+    'See-Also',
+    'Sender',
+    'Sensitivity',
+    'Speech-Act',
+    'Status',
+    'Subject',
+    'Summary',
+    'Supersedes',
+    'To',
+    'Translated-By',
+    'Translation-Of',
+    'User-Agent',
+    'X-Abuse-Info',
+    'X-Accept-Language',
+    'X-Admin',
+    'X-Article-Creation-Date',
+    'X-Attribution',
+    'X-Authenticated-IP',
+    'X-Authenticated-Sender',
+    'X-Authentication-Warning',
+    'X-Cache',
+    'X-Comments',
+    'X-Complaints-To',
+    'X-Confirm-reading-to',
+    'X-Envelope-From',
+    'X-Envelope-To',
+    'X-Face',
+    'X-Flags',
+    'X-Folder',
+    'X-Http-Proxy',
+    'X-Http-User-Agent',
+    'X-IMAP',
+    'X-Last-Updated',
+    'X-List-Host',
+    'X-Listserver',
+    'X-Loop',
+    'X-Mailer',
+    'X-Mailer-Info',
+    'X-Mailing-List',
+    'X-MIME-Autoconverted',
+    'X-MimeOLE',
+    'X-MIMETrack',
+    'X-MSMail-Priority',
+    'X-MyDeja-Info',
+    'X-Newsreader',
+    'X-NNTP-Posting-Host',
+    'X-No-Archive',
+    'X-Notice',
+    'X-Orig-Message-ID',
+    'X-Original-Envelope-From',
+    'X-Original-NNTP-Posting-Host',
+    'X-Original-Trace',
+    'X-OriginalArrivalTime',
+    'X-Originating-IP',
+    'X-PMFLAGS',
+    'X-Posted-By',
+    'X-Posting-Agent',
+    'X-Priority',
+    'X-RCPT-TO',
+    'X-Report',
+    'X-Report-Abuse-To',
+    'X-Sender',
+    'X-Server-Date',
+    'X-Trace',
+    'X-UIDL',
+    'X-UML-Sequence',
+    'X-URI',
+    'X-URL',
+    'X-X-Sender',
+);
+
+sub email {
+    unshift @_, __PACKAGE__->new({}) and goto &send;
+}
+
+sub prepare_address {
+    my ($self, $field, @arguments) = @_;
+
+    my $headers = $self->get('headers');
+    my $value   = $headers->get($field);
+
+    return join ",", map $_->format, Email::AddressParser->parse(
+        $value->isa('Data::Object::Array')
+            ? $value->join(',')->data
+            : $value->data
+    );
+}
+
+sub prepare_package {
+    my ($self, $options, @arguments) = @_;
+
+    my $stuff   = Email::Stuffer->new;
+    my $options = $self->merge($options) if $options;
+    my $email   = $self->new($options->data // {});
+
+    # initialize headers
+    my $headers = $email->get('headers');
+       $headers = $email->set('headers' => {}) if not $headers;
+
+    # extract headers
+    for my $key (keys %headers) {
+        $headers->set($headers{$key}, $email->delete($key))
+            if $email->defined($key);
+    }
+
+    # required fields
+    my $required = $headers->filter_include(qw(From Subject To));
+    confess "Can't send email without a to, from, and subject property"
+        unless $required->values->count == 3;
+
+    # process address headers
+    my @address_headers = qw(
+        Abuse-Reports-To
+        Apparently-To
+        Delivered-To
+        Disposition-Notification-To
+        Errors-To
+        Followup-To
+        In-Reply-To
+        Mail-Copies-To
+        Old-X-Envelope-To
+        Posted-To
+        Read-Receipt-To
+        Resent-Reply-To
+        Resent-To
+        Return-Receipt-To
+        X-Complaints-To
+        X-Envelope-To
+        X-Report-Abuse-To
+    );
+    for my $key (qw(Cc Bcc From Reply-To To), @address_headers) {
+        $stuff->header($key => $email->prepare_address($key))
+            if $headers->defined($key)
+    }
+
+    # process subject
+    $stuff->subject($headers->get('Subject')->data)
+        if $headers->defined('Subject');
+
+    # process message
+    if ($email->defined('message')) {
+        my $type     = $email->get('type');
+        my $message  = $email->get('message');
+        my $html_msg = $email->lookup('message.html');
+        my $text_msg = $email->lookup('message.text');
+
+        # multipart send using plain text and html
+        if (($type and lc($type) eq 'multi') or ($html_msg and $text_msg)) {
+            $stuff->html_body("$html_msg") if defined $html_msg;
+            $stuff->text_body("$text_msg") if defined $text_msg;
+        }
+        elsif (($type and lc($type) ne 'multi') and $message) {
+            # standard send using html or plain text
+            $stuff->html_body("$message") if $type and $type eq 'html';
+            $stuff->text_body("$message") if $type and $type eq 'text';
+        }
+    }
+
+    confess "Can't send email without a message property"
+        unless $email->defined('message');
+
+    # process additional headers
+    my %excluded_headers = map { $_ => 1 } @address_headers, qw(
+        Cc
+        Bcc
+        From
+        Reply-To
+        Subject
+        To
+    );
+    for my $key (grep { !$excluded_headers{$_} } @headers) {
+        $stuff->header($key => $headers->get($key)->data)
+            if $headers->defined($key)
+    }
+
+    # process attachments - old behavior
+    if (my $attachments = $email->get('attach')) {
+        if ($attachments->isa('Data::Object::Array')) {
+            my %files = ($attachments->list);
+            foreach my $file (keys %files) {
+                if ($files{$file}) {
+                    my $data = read_file($files{$file}, binmode => ':raw');
+                    $stuff->attach($data, name => $file, filename => $file);
+                }
+                else {
+                    $stuff->attach_file($file);
+                }
+            }
+        }
+    }
+    # process attachments - new behavior
+    if (my $attachments = $email->get('files')) {
+        if ($attachments->isa('Data::Object::Array')) {
+            $stuff->attach_file($_->data) for ($attachments->list);
+        }
+    }
+
+    # transport email explicitly
+    $stuff->transport(@arguments) if @arguments;
+    return $stuff if @arguments;
+
+    # transport email implicitly
+    my $driver   = $email->get('driver')->data;
+    my $sendmail = lc($driver) eq lc('sendmail');
+    my $smtpmail = lc($driver) eq lc('smtp');
+
+    if ($sendmail) {
+        my $path = $email->get('path')->data;
+
+        $path ||= '/usr/bin/sendmail'  if -f '/usr/bin/sendmail';
+        $path ||= '/usr/sbin/sendmail' if -f '/usr/sbin/sendmail';
+
+        $stuff->transport('Sendmail' => (sendmail => $path));
+    }
+
+    if ($smtpmail) {
+        my @parameters = ();
+        for my $key (qw(host port ssl)) {
+            my %map = (
+                user => 'sasl_username',
+                pass => 'sasl_password',
+            );
+            $key = $map{$key} // $key;
+            push @parameters, $key, $email->get($key)->data
+                if $email->defined($key);
+        }
+
+        push @parameters, 'proto' => 'tcp'; # no longer used
+        push @parameters, 'reuse' => 1;     # no longer used
+
+        $stuff->transport('SMTP' => @parameters);
+    }
+
+    return $stuff;
+}
+
+sub send {
+    my ($self, $options, @arguments) = @_;
+    my $package = $self->prepare_package($options, @arguments);
+    return $package->send;
+}
+
+1;
+
+=encoding utf8
 
 =head1 SYNOPSIS
 
@@ -33,21 +396,21 @@ use Email::Stuffer;
 
 Emailesque provides an easy way of handling text or html email messages
 with or without attachments. Simply define how you wish to send the email,
-thencall the email keyword passing the necessary parameters as outlined above.
+then call the email keyword passing the necessary parameters as outlined above.
 This module is basically a wrapper around the email interface Email::Stuffer.
 The following is an example of the object-oriented interface:
 
     use Emailesque;
 
-    Emailesque->new->send({
+    my $email = Emailesque->new({
         to      => '...',
         from    => '...',
         subject => '...',
         message => '...',
-        attach  => [
-            'filename' => '/path/to/file'
-        ]
+        files   => ['/path/to/file/1', '/path/to/file/2'],
     });
+
+    $email->send;
 
 The Emailesque object-oriented interface is designed to accept parameters at
 instatiation and when calling the send method. This allows you to build-up an
@@ -202,177 +565,3 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     }
 
 =cut
-
-sub new {
-    my $class = shift;
-    my $attributes = shift || {};
-
-    $attributes->{driver} = 'sendmail' unless defined $attributes->{driver};
-    $attributes->{type}   = 'html' unless defined $attributes->{type};
-
-    return bless { settings => $attributes }, $class;
-}
-
-sub email {
-    return Emailesque->new->send(@_);
-}
-
-sub send {
-    my $self = shift;
-    my $stuff = $self->_prepare_send(@_);
-
-    return $stuff->send;
-}
-
-sub _prepare_send {
-    my ($self, $options, @arguments)  = @_;
-    my $stuff = Email::Stuffer->new;
-    my $settings = $self->{settings};
-
-    $settings = {} unless 'HASH' eq ref $settings;
-    $options  = {} unless 'HASH' eq ref $options;
-
-    $options = Hash::Merge->new( 'LEFT_PRECEDENT' )->merge($options, $settings);
-
-    die "cannot send mail without a sender, recipient, subject and message"
-        unless $options->{to} && $options->{from} &&
-               $options->{subject} && $options->{message};
-
-    # process to
-    if ($options->{to}) {
-        $stuff->to(join ",",
-            map { $_->format } Email::AddressParser->parse($options->{to}));
-    }
-
-    # process from
-    if ($options->{from}) {
-        $stuff->from(join ",",
-            map { $_->format } Email::AddressParser->parse($options->{from}));
-    }
-
-    # process cc
-    if ($options->{cc}) {
-        $stuff->cc(join ",",
-            map { $_->format } Email::AddressParser->parse($options->{cc}));
-    }
-
-    # process bcc
-    if ($options->{bcc}) {
-        $stuff->bcc(join ",",
-            map { $_->format } Email::AddressParser->parse($options->{bcc}));
-    }
-
-    # process reply_to
-    if ($options->{reply_to}) {
-        $stuff->header("Reply-to" => $options->{reply_to});
-    }
-
-    # process subject
-    if ($options->{subject}) {
-        $stuff->subject($options->{subject});
-    }
-
-    # process message
-    if ($options->{message}) {
-        # multipart send using plain text and html
-        if (lc($options->{type}) eq 'multi') {
-            if (ref($options->{message}) eq "HASH") {
-                $stuff->html_body($options->{message}->{html})
-                    if defined $options->{message}->{html};
-                $stuff->text_body($options->{message}->{text})
-                    if defined $options->{message}->{text};
-            }
-        }
-        else {
-            # standard send using html or plain text
-            if (lc($options->{type}) eq 'html') {
-                $stuff->html_body($options->{message});
-            }
-            else {
-                $stuff->text_body($options->{message});
-            }
-        }
-    }
-
-    # process additional headers
-    if ($options->{headers} && ref($options->{headers}) eq "HASH") {
-        foreach my $header (keys %{ $options->{headers} }) {
-            $stuff->header( $header => $options->{headers}->{$header} );
-        }
-    }
-
-    # process attachments
-    if ($options->{attach}) {
-        if (ref($options->{attach}) eq "ARRAY") {
-            my %files = @{$options->{attach}};
-            foreach my $file (keys %files) {
-                if ($files{$file}) {
-                    my $data = read_file($files{$file}, binmode => ':raw');
-                    $stuff->attach($data, name => $file, filename => $file);
-                }
-                else {
-                  $stuff->attach_file($file);
-                }
-            }
-        }
-    }
-
-    # check multi-type email messages
-    if (lc($options->{type}) eq 'multi') {
-        die 'Email error: specify type multi if sending text and html'
-            unless "HASH" eq ref $options->{message}
-                && exists $options->{message}->{text}
-                && exists $options->{message}->{html};
-    }
-
-    # okay, go team, go
-    if (!@arguments) {
-        if (lc($options->{driver}) eq lc("sendmail")) {
-            unless ($options->{path}) {
-                for ('/usr/bin/sendmail', '/usr/sbin/sendmail') {
-                    $options->{path} = $_ if -f $_
-                }
-            }
-
-            $options->{path} ||= '';
-            $stuff->transport('Sendmail' => (sendmail => $options->{path}));
-        }
-
-        if (lc($options->{driver}) eq lc("smtp")) {
-            if ($options->{host} && $options->{user} && $options->{pass}) {
-                my @parameters = ();
-
-                push @parameters, 'host' => $options->{host}
-                    if $options->{host};
-
-                push @parameters, 'port' => $options->{port}
-                    if $options->{port};
-
-                push @parameters, 'sasl_username' => $options->{user}
-                    if $options->{user};
-
-                push @parameters, 'sasl_password' => $options->{pass}
-                    if $options->{pass};
-
-                push @parameters, 'ssl' => $options->{ssl}
-                    if $options->{ssl};
-
-                push @parameters, 'proto' => 'tcp'; # no longer used
-                push @parameters, 'reuse' => 1;     # no longer used
-
-                $stuff->transport('SMTP' => @parameters);
-            }
-            else {
-                $stuff->transport('SMTP' => (host => $options->{host}));
-            }
-        }
-    }
-
-    else {
-        $stuff->transport(@arguments) if @arguments;
-    }
-
-    return $stuff;
-}
-
-1;

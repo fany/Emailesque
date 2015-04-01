@@ -19,7 +19,7 @@ sub test_function {
 sub test_method {
     my ($self, $data) = @_;
 
-    my $result = Emailesque->new->send($data, 'Test');
+    my $result = Emailesque->new({})->send($data, 'Test');
     return ref($result) =~ /success/i;
 }
 
