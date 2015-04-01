@@ -197,12 +197,9 @@ Al Newkirk <anewkirk@ana.io>
 
 # CONTRIBUTORS
 
-- Al Newkirk & Associates <github@alnewkirk.com>
-- Al Newkirk <root@alnewkirk.com>
-- Al Newkirk <we@ana.im>
 - Andrew Beverley <a.beverley@ctrlo.com>
 - Eric Johnson <eric.git@iijo.org>
-- root <root@megatron.(none)>
+- Stefan Hornburg <racke@linuxia.de>
 
 # COPYRIGHT AND LICENSE
 

@@ -1,6 +1,8 @@
 Changelog for Emailesque
 
-1.21 2015-04-01T20:07:38
+1.21 2015-04-01T20:28:14
+ - Updated dist.ini.
+ - Updated build.
  - Refactored using Data::Object for better OO.
  - Fix pod fix
  - Fixes for pod
