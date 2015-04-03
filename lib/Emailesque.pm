@@ -1019,8 +1019,11 @@ sub prepare_package {
 
     # transport email implicitly
     my $driver   = $email->get('driver')->data;
-    my $sendmail = lc($driver) eq lc('sendmail');
-    my $smtpmail = lc($driver) eq lc('smtp');
+    my $sendmail = lc($driver) eq 'sendmail';
+    my $smtpmail = lc($driver) eq 'smtp';
+
+    # default transport to sendmail
+    $sendmail = 1 unless $sendmail or $smtpmail;
 
     if ($sendmail) {
         my $path = $email->get('path')->data;
@@ -1100,6 +1103,7 @@ The following is an example of the object-oriented interface:
     });
 
     my $result = $email->send;
+
     if ($result->isa('Email::Sender::Failure')) {
         die $result->message;
     }
@@ -1141,11 +1145,9 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     # message body
     $email->message('...') # html or text data
 
-    # message body (must set type to multi)
-    $email->message({
-        text => $text_message,
-        html => $html_messase,
-    })
+    # message multipart content
+    $email->type('multi') # must set type to multi
+    $email->message({ text => $text_message, html => $html_messase })
 
     # email message content type (type: text, html, or multi)
     $email->send({ type => 'text' })
@@ -1170,22 +1172,26 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     $email->send({ attach => [ $file_path => undef ] })
 
     # send additional headers explicitly
-    $email->new({ headers  => { 'X-Mailer' => '...' } })
+    $email->send({ headers  => { 'X-Mailer' => '...' } })
 
     # send additional headers implicitly
-    $email->new({ x_mailer => '...' } # simpler
+    $email->send({ x_mailer => '...' } # simpler
+
+The default email transport is sendmail. This can be changed by specifying a
+different driver parameter, e.g. smtp, as well as any additional arguments
+required by the transport:
 
     # send mail via smtp
-    {
+    $email->send({
         ...,
         driver  => 'smtp',
         host    => 'smtp.googlemail.com',
         user    => 'account@gmail.com',
         pass    => '****'
-    }
+    })
 
     # send mail via smtp via Google (gmail)
-    {
+    $email->send({
         ...,
         ssl     => 1,
         driver  => 'smtp',
@@ -1193,15 +1199,26 @@ the hashref of arguments to the keyword, constructor and/or the send method:
         port    => 465,
         user    => 'account@gmail.com',
         pass    => '****'
-    }
+    })
+
+    # send mail via smtp via Mailchimp (mandrill)
+    $email->send({
+        ...,
+        ssl     => 0,
+        driver  => 'smtp',
+        host    => 'smtp.mandrillapp.com',
+        port    => 587,
+        user    => 'account@domain.com',
+        pass    => '****'
+    })
 
     # send mail via sendmail
     # path is optional if installed in a standard location
-    {
+    $email->send({
         ...,
         driver  => 'sendmail',
         path    => '/usr/bin/sendmail',
-    }
+    })
 
 =cut
 
