@@ -1,6 +1,11 @@
 Changelog for Emailesque
 
-1.22 2015-04-03T03:36:24
+1.23 2015-04-03T23:53:05
+ - Updated build.
+ - Fixed default transport, Updated documentation.
+
+1.22 2015-04-03T03:36:38
+ - v1.22
  - Updated build.
  - Fixed SMTP bug, Added shortcut methods, Updated documentation.
  - Updated dist.ini.

@@ -31,7 +31,7 @@ my %WriteMakefileArgs = (
     "Net::SMTP::TLS" => 0,
     "Net::SSLeay" => 0
   },
-  "VERSION" => "1.22",
+  "VERSION" => "1.23",
   "test" => {
     "TESTS" => "t/*.t"
   }

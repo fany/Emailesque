@@ -1145,20 +1145,22 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     # message body
     $email->message('...') # html or text data
 
+    # email message content type (type: text, html, or multi)
+    $email->send({ type => 'text' })
+
     # message multipart content
     $email->type('multi') # must set type to multi
     $email->message({ text => $text_message, html => $html_messase })
 
-    # email message content type (type: text, html, or multi)
-    $email->send({ type => 'text' })
-
     # carbon-copy other email addresses
     $email->send({ cc => 'user@site.com' })
-    $email->send({ cc => 'user_a@site.com, user_b@site.com, user_c@site.com' })
+    $email->send({ cc => 'usr1@site.com, usr2@site.com, usr3@site.com' })
+    $email->send({ cc => [qw(usr1@site.com usr2@site.com usr3@site.com)] })
 
     # blind carbon-copy other email addresses
     $email->send({ bcc => 'user@site.com' })
-    $email->send({ bcc => 'user_a@site.com, user_b@site.com, user_c@site.com' })
+    $email->send({ bcc => 'usr1@site.com, usr2@site.com, usr3@site.com' })
+    $email->send({ bcc => [qw(usr1@site.com usr2@site.com usr3@site.com)] })
 
     # specify where email responses should be directed
     $email->send({ reply_to => 'other_email@website.com' })
