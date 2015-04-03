@@ -9,7 +9,7 @@ use Email::Sender::Transport::SMTP;
 use Email::Stuffer;
 
 use Exporter 'import';
-our @EXPORT = qw(email);
+our @EXPORT_OK = qw(email);
 
 use parent 'Data::Object::Hash';
 
@@ -21,199 +21,876 @@ my %headers = map {
        $name => $_;
 }
 my @headers = (
-    'Alternate-Recipient',
-    'Apparently-To',
-    'Approved',
-    'Approved-By',
-    'Autoforwarded',
-    'Auto-Forwarded',
-    'Bcc',
-    'Cache-Post-Path',
-    'Cc',
-    'Comments',
-    'Content-Alias',
-    'Content-Alternative',
-    'Content-Base',
-    'Content-Class',
-    'Content-Conversion',
-    'Content-Description',
-    'Content-Disposition',
-    'Content-Features',
-    'Content-ID',
-    'Content-Identifier',
-    'Content-Language',
-    'Content-Length',
-    'Content-Location',
-    'Content-MD5',
-    'Content-Return',
-    'Content-SGML-Entity',
-    'Content-Transfer-Encoding',
-    'Content-Type',
-    'Control',
-    'Conversion',
-    'Conversion-With-Loss',
-    'Date',
-    'Delivered-To',
-    'Delivery-Date',
-    'Disclose-Recipients',
-    'Disposition-Notification-Options',
-    'Disposition-Notification-To',
-    'Distribution',
-    'Encoding',
-    'Errors-To',
-    'Envelope-ID',
-    'Expires',
-    'Expiry-Date',
-    'Fcc',
-    'Followup-To',
-    'For-Approval',
-    'For-Comment',
-    'For-Handling',
-    'From',
-    'Generate-Delivery-Report',
-    'Importance',
-    'In-Reply-To',
-    'Incomplete-Copy',
-    'Injector-Info',
-    'Keywords',
-    'Language',
-    'Lines',
-    'List-Archive',
-    'List-Digest',
-    'List-ID',
-    'List-Owner',
-    'List-Post',
-    'List-Software',
-    'List-Subscribe',
-    'List-Unsubscribe',
-    'List-URL',
-    'Mail-Copies-To',
-    'Mail-Reply-Requested-By',
-    'Mail-System-Version',
-    'Mailer',
-    'Mailing-List',
-    'Message-ID',
-    'Message-Type',
-    'MIME-Version',
-    'Newsgroups',
-    'NNTP-Posting-Date',
-    'NNTP-Posting-Host',
-    'NNTP-Posting-Time',
-    'NNTP-Proxy-Relay',
-    'Obsoletes',
-    'Old-Date',
-    'Old-X-Envelope-From',
-    'Old-X-Envelope-To',
-    'Organisation',
-    'Organization',
-    'Original-Encoded-Information-Types',
-    'Original-Recipient',
-    'Originating-Client',
-    'Originator',
-    'Originator-Info',
-    'Path',
-    'Phone',
-    'Posted-To',
-    'Precedence',
-    'Prevent-NonDelivery-Report',
-    'Priority',
-    'Read-Receipt-To',
-    'Received',
-    'References',
-    'Replaces',
-    'Reply-By',
-    'Reply-To',
-    'Resent-bcc',
-    'Resent-cc',
-    'Resent-Date',
-    'Resent-From',
-    'Resent-Message-ID',
-    'Resent-Reply-To',
-    'Resent-Sender',
-    'Resent-Subject',
-    'Resent-To',
-    'Return-Path',
-    'Return-Receipt-Requested',
-    'Return-Receipt-To',
-    'See-Also',
-    'Sender',
-    'Sensitivity',
-    'Speech-Act',
-    'Status',
-    'Subject',
-    'Summary',
-    'Supersedes',
-    'To',
-    'Translated-By',
-    'Translation-Of',
-    'User-Agent',
-    'X-Abuse-Info',
-    'X-Accept-Language',
-    'X-Admin',
-    'X-Article-Creation-Date',
-    'X-Attribution',
-    'X-Authenticated-IP',
-    'X-Authenticated-Sender',
-    'X-Authentication-Warning',
-    'X-Cache',
-    'X-Comments',
-    'X-Complaints-To',
-    'X-Confirm-reading-to',
-    'X-Envelope-From',
-    'X-Envelope-To',
-    'X-Face',
-    'X-Flags',
-    'X-Folder',
-    'X-Http-Proxy',
-    'X-Http-User-Agent',
-    'X-IMAP',
-    'X-Last-Updated',
-    'X-List-Host',
-    'X-Listserver',
-    'X-Loop',
-    'X-Mailer',
-    'X-Mailer-Info',
-    'X-Mailing-List',
-    'X-MIME-Autoconverted',
-    'X-MimeOLE',
-    'X-MIMETrack',
-    'X-MSMail-Priority',
-    'X-MyDeja-Info',
-    'X-Newsreader',
-    'X-NNTP-Posting-Host',
-    'X-No-Archive',
-    'X-Notice',
-    'X-Orig-Message-ID',
-    'X-Original-Envelope-From',
-    'X-Original-NNTP-Posting-Host',
-    'X-Original-Trace',
-    'X-OriginalArrivalTime',
-    'X-Originating-IP',
-    'X-PMFLAGS',
-    'X-Posted-By',
-    'X-Posting-Agent',
-    'X-Priority',
-    'X-RCPT-TO',
-    'X-Report',
-    'X-Report-Abuse-To',
-    'X-Sender',
-    'X-Server-Date',
-    'X-Trace',
-    'X-UIDL',
-    'X-UML-Sequence',
-    'X-URI',
-    'X-URL',
-    'X-X-Sender',
+    my @kheaders = (
+        'Accept-Language',
+        'Alternate-Recipient',
+        'Apparently-To',
+        'Archived-At',
+        'Authentication-Results',
+        'Auto-Submitted',
+        'Autoforwarded',
+        'Autosubmitted',
+        'Bcc',
+        'Cc',
+        'Comments',
+        'Content-Identifier',
+        'Content-Return',
+        'Conversion-With-Loss',
+        'Conversion',
+        'DKIM-Signature',
+        'DL-Expansion-History',
+        'Date',
+        'Deferred-Delivery',
+        'Delivery-Date',
+        'Discarded-X400-IPMS-Extensions',
+        'Discarded-X400-MTS-Extensions',
+        'Disclose-Recipients',
+        'Disposition-Notification-Options',
+        'Disposition-Notification-To',
+        'Downgraded-Bcc',
+        'Downgraded-Cc',
+        'Downgraded-Disposition-Notification-To',
+        'Downgraded-Final-Recipient',
+        'Downgraded-From',
+        'Downgraded-In-Reply-To',
+        'Downgraded-Mail-From',
+        'Downgraded-Message-Id',
+        'Downgraded-Original-Recipient',
+        'Downgraded-Rcpt-To',
+        'Downgraded-References',
+        'Downgraded-Reply-To',
+        'Downgraded-Resent-Bcc',
+        'Downgraded-Resent-Cc',
+        'Downgraded-Resent-From',
+        'Downgraded-Resent-Reply-To',
+        'Downgraded-Resent-Sender',
+        'Downgraded-Resent-To',
+        'Downgraded-Return-Path',
+        'Downgraded-Sender',
+        'Downgraded-To',
+        'EDIINT-Features',
+        'Encoding',
+        'Encrypted',
+        'Errors-To',
+        'Expires',
+        'Expiry-Date',
+        'From',
+        'Generate-Delivery-Report',
+        'Importance',
+        'In-Reply-To',
+        'Incomplete-Copy',
+        'Jabber-ID',
+        'Keywords',
+        'Language',
+        'Latest-Delivery-Time',
+        'List-Archive',
+        'List-Help',
+        'List-ID',
+        'List-Owner',
+        'List-Post',
+        'List-Subscribe',
+        'List-Unsubscribe',
+        'MMHS-Acp127-Message-Identifier',
+        'MMHS-Codress-Message-Indicator',
+        'MMHS-Copy-Precedence',
+        'MMHS-Exempted-Address',
+        'MMHS-Extended-Authorisation-Info',
+        'MMHS-Handling-Instructions',
+        'MMHS-Message-Instructions',
+        'MMHS-Message-Type',
+        'MMHS-Originator-PLAD',
+        'MMHS-Originator-Reference',
+        'MMHS-Other-Recipients-Indicator-CC',
+        'MMHS-Other-Recipients-Indicator-To',
+        'MMHS-Primary-Precedence',
+        'MMHS-Subject-Indicator-Codes',
+        'MT-Priority',
+        'Message-Context',
+        'Message-ID',
+        'Message-Type',
+        'Obsoletes',
+        'Original-Encoded-Information-Types',
+        'Original-From',
+        'Original-Message-ID',
+        'Original-Recipient',
+        'Original-Subject',
+        'Originator-Return-Address',
+        'PICS-Label',
+        'Prevent-NonDelivery-Report',
+        'Priority',
+        'Privicon',
+        'Received-SPF',
+        'Received',
+        'References',
+        'Reply-By',
+        'Reply-To',
+        'Require-Recipient-Valid-Since',
+        'Resent-Bcc',
+        'Resent-Cc',
+        'Resent-Date',
+        'Resent-From',
+        'Resent-Message-ID',
+        'Resent-Reply-To',
+        'Resent-Sender',
+        'Resent-To',
+        'Return-Path',
+        'SIO-Label-History',
+        'SIO-Label',
+        'Sender',
+        'Sensitivity',
+        'Solicitation',
+        'Subject',
+        'Supersedes',
+        'To',
+        'VBR-Info',
+        'X-Archived-At',
+        'X400-Content-Identifier',
+        'X400-Content-Return',
+        'X400-Content-Type',
+        'X400-MTS-Identifier',
+        'X400-Originator',
+        'X400-Received',
+        'X400-Recipients',
+        'X400-Trace',
+    ),
+    my @xheaders = (
+        'X-Abuse-Info',
+        'X-Accept-Language',
+        'X-Admin',
+        'X-Article-Creation-Date',
+        'X-Attribution',
+        'X-Authenticated-IP',
+        'X-Authenticated-Sender',
+        'X-Authentication-Warning',
+        'X-Cache',
+        'X-Comments',
+        'X-Complaints-To',
+        'X-Confirm-reading-to',
+        'X-Envelope-From',
+        'X-Envelope-To',
+        'X-Face',
+        'X-Flags',
+        'X-Folder',
+        'X-IMAP',
+        'X-Last-Updated',
+        'X-List-Host',
+        'X-Listserver',
+        'X-Loop',
+        'X-Mailer',
+        'X-Mailer-Info',
+        'X-Mailing-List',
+        'X-MIME-Autoconverted',
+        'X-MimeOLE',
+        'X-MIMETrack',
+        'X-MSMail-Priority',
+        'X-MyDeja-Info',
+        'X-Newsreader',
+        'X-NNTP-Posting-Host',
+        'X-No-Archive',
+        'X-Notice',
+        'X-Orig-Message-ID',
+        'X-Original-Envelope-From',
+        'X-Original-NNTP-Posting-Host',
+        'X-Original-Trace',
+        'X-OriginalArrivalTime',
+        'X-Originating-IP',
+        'X-PMFLAGS',
+        'X-Posted-By',
+        'X-Posting-Agent',
+        'X-Priority',
+        'X-RCPT-TO',
+        'X-Report',
+        'X-Report-Abuse-To',
+        'X-Sender',
+        'X-Server-Date',
+        'X-Trace',
+        'X-URI',
+        'X-URL',
+        'X-X-Sender',
+    ),
 );
 
 sub email {
     unshift @_, __PACKAGE__->new({}) and goto &send;
 }
 
+sub message {
+    my ($self, @arguments) = @_;
+    return $self->set('message', @arguments);
+}
+
+sub send {
+    my ($self, $options, @arguments) = @_;
+    my $package = $self->prepare_package($options, @arguments);
+    return $package->send;
+}
+
+sub accept_language {
+    my $name = 'Accept-Language';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub alternate_recipient {
+    my $name = 'Alternate-Recipient';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub apparently_to {
+    my $name = 'Apparently-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub archived_at {
+    my $name = 'Archived-At';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub authentication_results {
+    my $name = 'Authentication-Results';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub auto_submitted {
+    my $name = 'Auto-Submitted';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub autoforwarded {
+    my $name = 'Autoforwarded';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub autosubmitted {
+    my $name = 'Autosubmitted';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub bcc {
+    my $name = 'Bcc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub cc {
+    my $name = 'Cc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub comments {
+    my $name = 'Comments';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub content_identifier {
+    my $name = 'Content-Identifier';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub content_return {
+    my $name = 'Content-Return';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub conversion {
+    my $name = 'Conversion';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub conversion_with_loss {
+    my $name = 'Conversion-With-Loss';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub dkim_signature {
+    my $name = 'DKIM-Signature';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub dl_expansion_history {
+    my $name = 'DL-Expansion-History';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub date {
+    my $name = 'Date';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub deferred_delivery {
+    my $name = 'Deferred-Delivery';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub delivery_date {
+    my $name = 'Delivery-Date';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub discarded_x400_ipms_extensions {
+    my $name = 'Discarded-X400-IPMS-Extensions';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub discarded_x400_mts_extensions {
+    my $name = 'Discarded-X400-MTS-Extensions';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub disclose_recipients {
+    my $name = 'Disclose-Recipients';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub disposition_notification_options {
+    my $name = 'Disposition-Notification-Options';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub disposition_notification_to {
+    my $name = 'Disposition-Notification-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_bcc {
+    my $name = 'Downgraded-Bcc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_cc {
+    my $name = 'Downgraded-Cc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_disposition_notification_to {
+    my $name = 'Downgraded-Disposition-Notification-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_final_recipient {
+    my $name = 'Downgraded-Final-Recipient';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_from {
+    my $name = 'Downgraded-From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_in_reply_to {
+    my $name = 'Downgraded-In-Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_mail_from {
+    my $name = 'Downgraded-Mail-From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_message_id {
+    my $name = 'Downgraded-Message-Id';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_original_recipient {
+    my $name = 'Downgraded-Original-Recipient';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_rcpt_to {
+    my $name = 'Downgraded-Rcpt-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_references {
+    my $name = 'Downgraded-References';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_reply_to {
+    my $name = 'Downgraded-Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_bcc {
+    my $name = 'Downgraded-Resent-Bcc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_cc {
+    my $name = 'Downgraded-Resent-Cc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_from {
+    my $name = 'Downgraded-Resent-From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_reply_to {
+    my $name = 'Downgraded-Resent-Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_sender {
+    my $name = 'Downgraded-Resent-Sender';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_resent_to {
+    my $name = 'Downgraded-Resent-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_return_path {
+    my $name = 'Downgraded-Return-Path';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_sender {
+    my $name = 'Downgraded-Sender';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub downgraded_to {
+    my $name = 'Downgraded-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub ediint_features {
+    my $name = 'EDIINT-Features';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub encoding {
+    my $name = 'Encoding';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub encrypted {
+    my $name = 'Encrypted';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub errors_to {
+    my $name = 'Errors-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub expires {
+    my $name = 'Expires';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub expiry_date {
+    my $name = 'Expiry-Date';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub from {
+    my $name = 'From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub generate_delivery_report {
+    my $name = 'Generate-Delivery-Report';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub importance {
+    my $name = 'Importance';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub in_reply_to {
+    my $name = 'In-Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub incomplete_copy {
+    my $name = 'Incomplete-Copy';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub jabber_id {
+    my $name = 'Jabber-ID';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub keywords {
+    my $name = 'Keywords';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub language {
+    my $name = 'Language';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub latest_delivery_time {
+    my $name = 'Latest-Delivery-Time';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_archive {
+    my $name = 'List-Archive';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_help {
+    my $name = 'List-Help';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_id {
+    my $name = 'List-ID';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_owner {
+    my $name = 'List-Owner';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_post {
+    my $name = 'List-Post';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_subscribe {
+    my $name = 'List-Subscribe';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub list_unsubscribe {
+    my $name = 'List-Unsubscribe';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_acp127_message_identifier {
+    my $name = 'MMHS-Acp127-Message-Identifier';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_codress_message_indicator {
+    my $name = 'MMHS-Codress-Message-Indicator';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_copy_precedence {
+    my $name = 'MMHS-Copy-Precedence';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_exempted_address {
+    my $name = 'MMHS-Exempted-Address';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_extended_authorisation_info {
+    my $name = 'MMHS-Extended-Authorisation-Info';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_handling_instructions {
+    my $name = 'MMHS-Handling-Instructions';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_message_instructions {
+    my $name = 'MMHS-Message-Instructions';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_message_type {
+    my $name = 'MMHS-Message-Type';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_originator_plad {
+    my $name = 'MMHS-Originator-PLAD';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_originator_reference {
+    my $name = 'MMHS-Originator-Reference';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_other_recipients_indicator_cc {
+    my $name = 'MMHS-Other-Recipients-Indicator-CC';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_other_recipients_indicator_to {
+    my $name = 'MMHS-Other-Recipients-Indicator-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_primary_precedence {
+    my $name = 'MMHS-Primary-Precedence';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mmhs_subject_indicator_codes {
+    my $name = 'MMHS-Subject-Indicator-Codes';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub mt_priority {
+    my $name = 'MT-Priority';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub message_context {
+    my $name = 'Message-Context';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub message_id {
+    my $name = 'Message-ID';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub message_type {
+    my $name = 'Message-Type';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub obsoletes {
+    my $name = 'Obsoletes';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub original_encoded_information_types {
+    my $name = 'Original-Encoded-Information-Types';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub original_from {
+    my $name = 'Original-From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub original_message_id {
+    my $name = 'Original-Message-ID';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub original_recipient {
+    my $name = 'Original-Recipient';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub original_subject {
+    my $name = 'Original-Subject';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub originator_return_address {
+    my $name = 'Originator-Return-Address';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub pics_label {
+    my $name = 'PICS-Label';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub prevent_nondelivery_report {
+    my $name = 'Prevent-NonDelivery-Report';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub priority {
+    my $name = 'Priority';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub privicon {
+    my $name = 'Privicon';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub received {
+    my $name = 'Received';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub received_spf {
+    my $name = 'Received-SPF';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub references {
+    my $name = 'References';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub reply_by {
+    my $name = 'Reply-By';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub reply_to {
+    my $name = 'Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub require_recipient_valid_since {
+    my $name = 'Require-Recipient-Valid-Since';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_bcc {
+    my $name = 'Resent-Bcc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_cc {
+    my $name = 'Resent-Cc';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_date {
+    my $name = 'Resent-Date';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_from {
+    my $name = 'Resent-From';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_message_id {
+    my $name = 'Resent-Message-ID';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_reply_to {
+    my $name = 'Resent-Reply-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_sender {
+    my $name = 'Resent-Sender';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub resent_to {
+    my $name = 'Resent-To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub return_path {
+    my $name = 'Return-Path';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub sio_label {
+    my $name = 'SIO-Label';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub sio_label_history {
+    my $name = 'SIO-Label-History';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub sender {
+    my $name = 'Sender';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub sensitivity {
+    my $name = 'Sensitivity';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub solicitation {
+    my $name = 'Solicitation';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub subject {
+    my $name = 'Subject';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub supersedes {
+    my $name = 'Supersedes';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub to {
+    my $name = 'To';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub vbr_info {
+    my $name = 'VBR-Info';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x_archived_at {
+    my $name = 'X-Archived-At';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_content_identifier {
+    my $name = 'X400-Content-Identifier';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_content_return {
+    my $name = 'X400-Content-Return';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_content_type {
+    my $name = 'X400-Content-Type';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_mts_identifier {
+    my $name = 'X400-MTS-Identifier';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_originator {
+    my $name = 'X400-Originator';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_received {
+    my $name = 'X400-Received';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_recipients {
+    my $name = 'X400-Recipients';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub x400_trace {
+    my $name = 'X400-Trace';
+    unshift @_, shift, $name and goto &header;
+}
+
+sub header {
+    my ($self, $name) = (shift, shift);
+    $name = $headers{$name} // $name;
+
+    my $headers = $self->get('headers');
+       $headers = $self->set('headers' => {}) if not $headers;
+
+    return $headers->set($name => shift) if @_;
+    return $headers->get($name);
+}
+
 sub prepare_address {
     my ($self, $field, @arguments) = @_;
 
     my $headers = $self->get('headers');
+       $headers = $self->set('headers' => {}) if not $headers;
     my $value   = $headers->get($field);
 
     return join ",", map $_->format, Email::AddressParser->parse(
@@ -226,19 +903,23 @@ sub prepare_address {
 sub prepare_package {
     my ($self, $options, @arguments) = @_;
 
-    $options = $self->merge($options) if $options;
+    $options = $self->merge($options // {});
 
     my $stuff   = Email::Stuffer->new;
-    my $email   = $self->new($options->data // {});
+    my $email   = $self->new($options->data);
 
-    # initialize headers
+    # remap references
+    $_[0] = $self = $email;
+
+    # configure headers
     my $headers = $email->get('headers');
        $headers = $email->set('headers' => {}) if not $headers;
 
     # extract headers
     for my $key (keys %headers) {
-        $headers->set($headers{$key}, $email->delete($key))
-            if $email->defined($key);
+        my $name  = $headers{$key};
+        my $value = $email->delete($key) or next;
+        $headers->set($name, $value) if $name and not $headers->defined($name);
     }
 
     # required fields
@@ -256,15 +937,11 @@ sub prepare_package {
         Followup-To
         In-Reply-To
         Mail-Copies-To
-        Old-X-Envelope-To
         Posted-To
         Read-Receipt-To
         Resent-Reply-To
         Resent-To
         Return-Receipt-To
-        X-Complaints-To
-        X-Envelope-To
-        X-Report-Abuse-To
     );
     for my $key (qw(Cc Bcc From Reply-To To), @address_headers) {
         $stuff->header($key => $email->prepare_address($key))
@@ -291,6 +968,9 @@ sub prepare_package {
             # standard send using html or plain text
             $stuff->html_body("$message") if $type and $type eq 'html';
             $stuff->text_body("$message") if $type and $type eq 'text';
+        }
+        else {
+            $stuff->text_body("$message");
         }
     }
 
@@ -352,30 +1032,34 @@ sub prepare_package {
     }
 
     if ($smtpmail) {
-        my @parameters = ();
-        for my $key (qw(host port ssl)) {
-            my %map = (
-                user => 'sasl_username',
-                pass => 'sasl_password',
-            );
-            $key = $map{$key} // $key;
-            push @parameters, $key, $email->get($key)->data
+        my %map  = (
+            user => 'sasl_username',
+            pass => 'sasl_password'
+        );
+        my @keys = qw(
+            debug
+            host
+            pass
+            password
+            port
+            ssl
+            user
+            username
+        );
+        my @params = ();
+
+        for my $key (@keys) {
+            push @params, $map{$key} // $key, $email->get($key)->data
                 if $email->defined($key);
         }
 
-        push @parameters, 'proto' => 'tcp'; # no longer used
-        push @parameters, 'reuse' => 1;     # no longer used
+        push @params, 'proto' => 'tcp'; # no longer used
+        push @params, 'reuse' => 1;     # no longer used
 
-        $stuff->transport('SMTP' => @parameters);
+        $stuff->transport('SMTP' => @params);
     }
 
     return $stuff;
-}
-
-sub send {
-    my ($self, $options, @arguments) = @_;
-    my $package = $self->prepare_package($options, @arguments);
-    return $package->send;
 }
 
 1;
@@ -384,7 +1068,9 @@ sub send {
 
 =head1 SYNOPSIS
 
-    use Emailesque;
+    use Emailesque qw(
+        email
+    );
 
     email {
         to      => '...',
@@ -401,6 +1087,8 @@ then call the email keyword passing the necessary parameters as outlined above.
 This module is basically a wrapper around the email interface Email::Stuffer.
 The following is an example of the object-oriented interface:
 
+=head1 OVERVIEW
+
     use Emailesque;
 
     my $email = Emailesque->new({
@@ -408,10 +1096,13 @@ The following is an example of the object-oriented interface:
         from    => '...',
         subject => '...',
         message => '...',
-        files   => ['/path/to/file/1', '/path/to/file/2'],
+        files   => [ '/path/to/file/1', '/path/to/file/2' ],
     });
 
-    $email->send;
+    my $result = $email->send;
+    if ($result->isa('Email::Sender::Failure')) {
+        die $result->message;
+    }
 
 The Emailesque object-oriented interface is designed to accept parameters at
 instatiation and when calling the send method. This allows you to build-up an
@@ -422,19 +1113,16 @@ following is an example of that:
     use Emailesque;
 
     my $email = Emailesque->new({
-        from    => '...',
-        subject => '...',
-        type    => 'html',
-        headers => {
-            "X-Mailer" => "MyApp-Newletter 0.019876"
-        }
+        from     => '...',
+        subject  => '...',
+        x_mailer => "MyApp-Newletter 0.019876",
+        x_url    => "https://mail.to/u/123/welcome",
+        type     => 'text',
     });
 
-    for my $email (@emails) {
-        $email->send({
-            to      => $email,
-            message => custom_email_message_for($email),
-        });
+    for my $user (@users) {
+        my $message = msg_generation $user;
+        $email->send({ to => $user, message => $message });
     }
 
 The default email format is plain-text, this can be changed to html by setting
@@ -442,89 +1130,52 @@ the option 'type' to 'html'. The following are options that can be passed within
 the hashref of arguments to the keyword, constructor and/or the send method:
 
     # send message to
-    to => $email_recipient
+    $email->to('...')
 
     # send messages from
-    from => $mail_sender
+    $email->from('...')
 
     # email subject
-    subject => 'email subject line'
+    $email->subject('...')
+
+    # message body
+    $email->message('...') # html or text data
 
     # message body (must set type to multi)
-    message => 'html or plain-text data'
-    message => {
+    $email->message({
         text => $text_message,
         html => $html_messase,
-    }
+    })
 
-    # email message content type
-    type => 'text'
-    type => 'html'
-    type => 'multi'
+    # email message content type (type: text, html, or multi)
+    $email->send({ type => 'text' })
 
     # carbon-copy other email addresses
-    cc => 'user@site.com'
-    cc => 'user_a@site.com, user_b@site.com, user_c@site.com'
+    $email->send({ cc => 'user@site.com' })
+    $email->send({ cc => 'user_a@site.com, user_b@site.com, user_c@site.com' })
 
     # blind carbon-copy other email addresses
-    bcc => 'user@site.com'
-    bcc => 'user_a@site.com, user_b@site.com, user_c@site.com'
+    $email->send({ bcc => 'user@site.com' })
+    $email->send({ bcc => 'user_a@site.com, user_b@site.com, user_c@site.com' })
 
     # specify where email responses should be directed
-    reply_to => 'other_email@website.com'
+    $email->send({ reply_to => 'other_email@website.com' })
 
     # attach files to the email
+    $email->send({ files => [ $file_path_1, $file_path_2 ] })
+
+    # attach files to the email (and specify attachment name)
     # set attachment name to undef to use the filename
-    attach => [
-        $filepath => undef,
-    ]
+    $email->send({ attach => [ $file_path => $attachment_name ] })
+    $email->send({ attach => [ $file_path => undef ] })
 
-    # send additional (specialized) headers
-    headers => {
-        "X-Mailer" => "SPAM-THE-WORLD-BOT 1.23456789"
-    }
+    # send additional headers explicitly
+    $email->new({ headers  => { 'X-Mailer' => '...' } })
 
-=head1 ADDITIONAL EXAMPLES
+    # send additional headers implicitly
+    $email->new({ x_mailer => '...' } # simpler
 
-    # Handle Email Failures
-
-    my $result = email {
-            to      => '...',
-            subject => '...',
-            message => $msg,
-            attach  => [
-                'filename' => '/path/to/file'
-            ]
-        };
-
-    die $result->message if ref($result) =~ /failure/i;
-
-    # Add More Email Headers
-
-    email {
-        to      => '...',
-        subject => '...',
-        message => $msg,
-        headers => {
-            "X-Mailer" => 'SPAM-THE-WORLD-BOT 1.23456789',
-            "X-Accept-Language" => 'en'
-        }
-    };
-
-    # Send Text and HTML Email together
-
-    email {
-        to      => '...',
-        subject => '...',
-        type    => 'multi',
-        message => {
-            text => $txt,
-            html => $html,
-        }
-    };
-
-    # Send mail via SMTP with SASL authentication
-
+    # send mail via smtp
     {
         ...,
         driver  => 'smtp',
@@ -533,8 +1184,7 @@ the hashref of arguments to the keyword, constructor and/or the send method:
         pass    => '****'
     }
 
-    # Send mail to/from Google (gmail)
-
+    # send mail via smtp via Google (gmail)
     {
         ...,
         ssl     => 1,
@@ -545,20 +1195,8 @@ the hashref of arguments to the keyword, constructor and/or the send method:
         pass    => '****'
     }
 
-    # Set headers to be issued with message
-
-    {
-        ...,
-        from => '...',
-        subject => '...',
-        headers => {
-            'X-Mailer' => 'MyApp 1.0',
-            'X-Accept-Language' => 'en'
-        }
-    }
-
-    # Send email using sendmail, path is optional
-
+    # send mail via sendmail
+    # path is optional if installed in a standard location
     {
         ...,
         driver  => 'sendmail',
@@ -566,3 +1204,1502 @@ the hashref of arguments to the keyword, constructor and/or the send method:
     }
 
 =cut
+
+=method accept_language
+
+    my $header = $email->accept_language;
+       $header = $email->accept_language('...');
+
+The accept_language method is a shortcut for getting and setting the
+C<Accept-Language> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method alternate_recipient
+
+    my $header = $email->alternate_recipient;
+       $header = $email->alternate_recipient('...');
+
+The alternate_recipient method is a shortcut for getting and setting the
+C<Alternate-Recipient> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method apparently_to
+
+    my $header = $email->apparently_to;
+       $header = $email->apparently_to('...');
+
+The apparently_to method is a shortcut for getting and setting the
+C<Apparently-To> header. This header is described in more detail within RFC2076
+L<http://www.iana.org/go/rfc2076>.
+
+=cut
+
+=method archived_at
+
+    my $header = $email->archived_at;
+       $header = $email->archived_at('...');
+
+The archived_at method is a shortcut for getting and setting the C<Archived-At>
+header. This header is described in more detail within RFC5064
+L<http://www.iana.org/go/rfc5064>.
+
+=cut
+
+=method authentication_results
+
+    my $header = $email->authentication_results;
+       $header = $email->authentication_results('...');
+
+The authentication_results method is a shortcut for getting and setting the
+C<Authentication-Results> header. This header is described in more detail
+within RFC7001 L<http://www.iana.org/go/rfc7001>.
+
+=cut
+
+=method auto_submitted
+
+    my $header = $email->auto_submitted;
+       $header = $email->auto_submitted('...');
+
+The auto_submitted method is a shortcut for getting and setting the
+C<Auto-Submitted> header. This header is described in more detail within
+RFC3834 L<http://www.iana.org/go/rfc3834>.
+
+=cut
+
+=method autoforwarded
+
+    my $header = $email->autoforwarded;
+       $header = $email->autoforwarded('...');
+
+The autoforwarded method is a shortcut for getting and setting the
+C<Autoforwarded> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method autosubmitted
+
+    my $header = $email->autosubmitted;
+       $header = $email->autosubmitted('...');
+
+The autosubmitted method is a shortcut for getting and setting the
+C<Autosubmitted> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method bcc
+
+    my $header = $email->bcc;
+       $header = $email->bcc('...');
+
+The bcc method is a shortcut for getting and setting the C<Bcc> header. This
+header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method cc
+
+    my $header = $email->cc;
+       $header = $email->cc('...');
+
+The cc method is a shortcut for getting and setting the C<Cc> header. This
+header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method comments
+
+    my $header = $email->comments;
+       $header = $email->comments('...');
+
+The comments method is a shortcut for getting and setting the C<Comments>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method content_identifier
+
+    my $header = $email->content_identifier;
+       $header = $email->content_identifier('...');
+
+The content_identifier method is a shortcut for getting and setting the
+C<Content-Identifier> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method content_return
+
+    my $header = $email->content_return;
+       $header = $email->content_return('...');
+
+The content_return method is a shortcut for getting and setting the
+C<Content-Return> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method conversion
+
+    my $header = $email->conversion;
+       $header = $email->conversion('...');
+
+The conversion method is a shortcut for getting and setting the C<Conversion>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method conversion_with_loss
+
+    my $header = $email->conversion_with_loss;
+       $header = $email->conversion_with_loss('...');
+
+The conversion_with_loss method is a shortcut for getting and setting the
+C<Conversion-With-Loss> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method dkim_signature
+
+    my $header = $email->dkim_signature;
+       $header = $email->dkim_signature('...');
+
+The dkim_signature method is a shortcut for getting and setting the
+C<DKIM-Signature> header. This header is described in more detail within
+RFC6376 L<http://www.iana.org/go/rfc6376>.
+
+=cut
+
+=method dl_expansion_history
+
+    my $header = $email->dl_expansion_history;
+       $header = $email->dl_expansion_history('...');
+
+The dl_expansion_history method is a shortcut for getting and setting the
+C<DL-Expansion-History> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method date
+
+    my $header = $email->date;
+       $header = $email->date('...');
+
+The date method is a shortcut for getting and setting the C<Date> header. This
+header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method deferred_delivery
+
+    my $header = $email->deferred_delivery;
+       $header = $email->deferred_delivery('...');
+
+The deferred_delivery method is a shortcut for getting and setting the
+C<Deferred-Delivery> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method delivery_date
+
+    my $header = $email->delivery_date;
+       $header = $email->delivery_date('...');
+
+The delivery_date method is a shortcut for getting and setting the
+C<Delivery-Date> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method discarded_x400_ipms_extensions
+
+    my $header = $email->discarded_x400_ipms_extensions;
+       $header = $email->discarded_x400_ipms_extensions('...');
+
+The discarded_x400_ipms_extensions method is a shortcut for getting and setting
+the C<Discarded-X400-IPMS-Extensions> header. This header is described in more
+detail within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method discarded_x400_mts_extensions
+
+    my $header = $email->discarded_x400_mts_extensions;
+       $header = $email->discarded_x400_mts_extensions('...');
+
+The discarded_x400_mts_extensions method is a shortcut for getting and setting
+the C<Discarded-X400-MTS-Extensions> header. This header is described in more
+detail within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method disclose_recipients
+
+    my $header = $email->disclose_recipients;
+       $header = $email->disclose_recipients('...');
+
+The disclose_recipients method is a shortcut for getting and setting the
+C<Disclose-Recipients> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method disposition_notification_options
+
+    my $header = $email->disposition_notification_options;
+       $header = $email->disposition_notification_options('...');
+
+The disposition_notification_options method is a shortcut for getting and
+setting the C<Disposition-Notification-Options> header. This header is
+described in more detail within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method disposition_notification_to
+
+    my $header = $email->disposition_notification_to;
+       $header = $email->disposition_notification_to('...');
+
+The disposition_notification_to method is a shortcut for getting and setting
+the C<Disposition-Notification-To> header. This header is described in more
+detail within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method downgraded_bcc
+
+    my $header = $email->downgraded_bcc;
+       $header = $email->downgraded_bcc('...');
+
+The downgraded_bcc method is a shortcut for getting and setting the
+C<Downgraded-Bcc> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_cc
+
+    my $header = $email->downgraded_cc;
+       $header = $email->downgraded_cc('...');
+
+The downgraded_cc method is a shortcut for getting and setting the
+C<Downgraded-Cc> header. This header is described in more detail within RFC5504
+L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_disposition_notification_to
+
+    my $header = $email->downgraded_disposition_notification_to;
+       $header = $email->downgraded_disposition_notification_to('...');
+
+The downgraded_disposition_notification_to method is a shortcut for getting and
+setting the C<Downgraded-Disposition-Notification-To> header. This header is
+described in more detail within RFC5504 L<http://www.iana.org/go/rfc5504> and
+RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_final_recipient
+
+    my $header = $email->downgraded_final_recipient;
+       $header = $email->downgraded_final_recipient('...');
+
+The downgraded_final_recipient method is a shortcut for getting and setting the
+C<Downgraded-Final-Recipient> header. This header is described in more detail
+within RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_from
+
+    my $header = $email->downgraded_from;
+       $header = $email->downgraded_from('...');
+
+The downgraded_from method is a shortcut for getting and setting the
+C<Downgraded-From> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_in_reply_to
+
+    my $header = $email->downgraded_in_reply_to;
+       $header = $email->downgraded_in_reply_to('...');
+
+The downgraded_in_reply_to method is a shortcut for getting and setting the
+C<Downgraded-In-Reply-To> header. This header is described in more detail
+within RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_mail_from
+
+    my $header = $email->downgraded_mail_from;
+       $header = $email->downgraded_mail_from('...');
+
+The downgraded_mail_from method is a shortcut for getting and setting the
+C<Downgraded-Mail-From> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_message_id
+
+    my $header = $email->downgraded_message_id;
+       $header = $email->downgraded_message_id('...');
+
+The downgraded_message_id method is a shortcut for getting and setting the
+C<Downgraded-Message-Id> header. This header is described in more detail within
+RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_original_recipient
+
+    my $header = $email->downgraded_original_recipient;
+       $header = $email->downgraded_original_recipient('...');
+
+The downgraded_original_recipient method is a shortcut for getting and setting
+the C<Downgraded-Original-Recipient> header. This header is described in more
+detail within RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_rcpt_to
+
+    my $header = $email->downgraded_rcpt_to;
+       $header = $email->downgraded_rcpt_to('...');
+
+The downgraded_rcpt_to method is a shortcut for getting and setting the
+C<Downgraded-Rcpt-To> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_references
+
+    my $header = $email->downgraded_references;
+       $header = $email->downgraded_references('...');
+
+The downgraded_references method is a shortcut for getting and setting the
+C<Downgraded-References> header. This header is described in more detail within
+RFC6857 L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_reply_to
+
+    my $header = $email->downgraded_reply_to;
+       $header = $email->downgraded_reply_to('...');
+
+The downgraded_reply_to method is a shortcut for getting and setting the
+C<Downgraded-Reply-To> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_bcc
+
+    my $header = $email->downgraded_resent_bcc;
+       $header = $email->downgraded_resent_bcc('...');
+
+The downgraded_resent_bcc method is a shortcut for getting and setting the
+C<Downgraded-Resent-Bcc> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_cc
+
+    my $header = $email->downgraded_resent_cc;
+       $header = $email->downgraded_resent_cc('...');
+
+The downgraded_resent_cc method is a shortcut for getting and setting the
+C<Downgraded-Resent-Cc> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_from
+
+    my $header = $email->downgraded_resent_from;
+       $header = $email->downgraded_resent_from('...');
+
+The downgraded_resent_from method is a shortcut for getting and setting the
+C<Downgraded-Resent-From> header. This header is described in more detail
+within RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_reply_to
+
+    my $header = $email->downgraded_resent_reply_to;
+       $header = $email->downgraded_resent_reply_to('...');
+
+The downgraded_resent_reply_to method is a shortcut for getting and setting the
+C<Downgraded-Resent-Reply-To> header. This header is described in more detail
+within RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_sender
+
+    my $header = $email->downgraded_resent_sender;
+       $header = $email->downgraded_resent_sender('...');
+
+The downgraded_resent_sender method is a shortcut for getting and setting the
+C<Downgraded-Resent-Sender> header. This header is described in more detail
+within RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_resent_to
+
+    my $header = $email->downgraded_resent_to;
+       $header = $email->downgraded_resent_to('...');
+
+The downgraded_resent_to method is a shortcut for getting and setting the
+C<Downgraded-Resent-To> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_return_path
+
+    my $header = $email->downgraded_return_path;
+       $header = $email->downgraded_return_path('...');
+
+The downgraded_return_path method is a shortcut for getting and setting the
+C<Downgraded-Return-Path> header. This header is described in more detail
+within RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_sender
+
+    my $header = $email->downgraded_sender;
+       $header = $email->downgraded_sender('...');
+
+The downgraded_sender method is a shortcut for getting and setting the
+C<Downgraded-Sender> header. This header is described in more detail within
+RFC5504 L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method downgraded_to
+
+    my $header = $email->downgraded_to;
+       $header = $email->downgraded_to('...');
+
+The downgraded_to method is a shortcut for getting and setting the
+C<Downgraded-To> header. This header is described in more detail within RFC5504
+L<http://www.iana.org/go/rfc5504> and RFC6857
+L<http://www.iana.org/go/rfc6857>.
+
+=cut
+
+=method ediint_features
+
+    my $header = $email->ediint_features;
+       $header = $email->ediint_features('...');
+
+The ediint_features method is a shortcut for getting and setting the
+C<EDIINT-Features> header. This header is described in more detail within
+RFC6017 L<http://www.iana.org/go/rfc6017>.
+
+=cut
+
+=method encoding
+
+    my $header = $email->encoding;
+       $header = $email->encoding('...');
+
+The encoding method is a shortcut for getting and setting the C<Encoding>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method encrypted
+
+    my $header = $email->encrypted;
+       $header = $email->encrypted('...');
+
+The encrypted method is a shortcut for getting and setting the C<Encrypted>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method errors_to
+
+    my $header = $email->errors_to;
+       $header = $email->errors_to('...');
+
+The errors_to method is a shortcut for getting and setting the C<Errors-To>
+header. This header is described in more detail within RFC2076
+L<http://www.iana.org/go/rfc2076>.
+
+=cut
+
+=method expires
+
+    my $header = $email->expires;
+       $header = $email->expires('...');
+
+The expires method is a shortcut for getting and setting the C<Expires> header.
+This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method expiry_date
+
+    my $header = $email->expiry_date;
+       $header = $email->expiry_date('...');
+
+The expiry_date method is a shortcut for getting and setting the C<Expiry-Date>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method from
+
+    my $header = $email->from;
+       $header = $email->from('...');
+
+The from method is a shortcut for getting and setting the C<From> header. This
+header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322> and RFC6854
+L<http://www.iana.org/go/rfc6854>.
+
+=cut
+
+=method generate_delivery_report
+
+    my $header = $email->generate_delivery_report;
+       $header = $email->generate_delivery_report('...');
+
+The generate_delivery_report method is a shortcut for getting and setting the
+C<Generate-Delivery-Report> header. This header is described in more detail
+within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method header
+
+    my $header = $email->header('X-Tag');
+       $header = $email->header('X-Tag', '...');
+
+The header method is used for getting and setting arbitrary headers by name.
+
+=cut
+
+=method importance
+
+    my $header = $email->importance;
+       $header = $email->importance('...');
+
+The importance method is a shortcut for getting and setting the C<Importance>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method in_reply_to
+
+    my $header = $email->in_reply_to;
+       $header = $email->in_reply_to('...');
+
+The in_reply_to method is a shortcut for getting and setting the C<In-Reply-To>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method incomplete_copy
+
+    my $header = $email->incomplete_copy;
+       $header = $email->incomplete_copy('...');
+
+The incomplete_copy method is a shortcut for getting and setting the
+C<Incomplete-Copy> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method jabber_id
+
+    my $header = $email->jabber_id;
+       $header = $email->jabber_id('...');
+
+The jabber_id method is a shortcut for getting and setting the C<Jabber-ID>
+header. This header is described in more detail within RFC7259
+L<http://www.iana.org/go/rfc7259>.
+
+=cut
+
+=method keywords
+
+    my $header = $email->keywords;
+       $header = $email->keywords('...');
+
+The keywords method is a shortcut for getting and setting the C<Keywords>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method language
+
+    my $header = $email->language;
+       $header = $email->language('...');
+
+The language method is a shortcut for getting and setting the C<Language>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method latest_delivery_time
+
+    my $header = $email->latest_delivery_time;
+       $header = $email->latest_delivery_time('...');
+
+The latest_delivery_time method is a shortcut for getting and setting the
+C<Latest-Delivery-Time> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_archive
+
+    my $header = $email->list_archive;
+       $header = $email->list_archive('...');
+
+The list_archive method is a shortcut for getting and setting the
+C<List-Archive> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_help
+
+    my $header = $email->list_help;
+       $header = $email->list_help('...');
+
+The list_help method is a shortcut for getting and setting the C<List-Help>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_id
+
+    my $header = $email->list_id;
+       $header = $email->list_id('...');
+
+The list_id method is a shortcut for getting and setting the C<List-ID> header.
+This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_owner
+
+    my $header = $email->list_owner;
+       $header = $email->list_owner('...');
+
+The list_owner method is a shortcut for getting and setting the C<List-Owner>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_post
+
+    my $header = $email->list_post;
+       $header = $email->list_post('...');
+
+The list_post method is a shortcut for getting and setting the C<List-Post>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_subscribe
+
+    my $header = $email->list_subscribe;
+       $header = $email->list_subscribe('...');
+
+The list_subscribe method is a shortcut for getting and setting the
+C<List-Subscribe> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method list_unsubscribe
+
+    my $header = $email->list_unsubscribe;
+       $header = $email->list_unsubscribe('...');
+
+The list_unsubscribe method is a shortcut for getting and setting the
+C<List-Unsubscribe> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method mmhs_acp127_message_identifier
+
+    my $header = $email->mmhs_acp127_message_identifier;
+       $header = $email->mmhs_acp127_message_identifier('...');
+
+The mmhs_acp127_message_identifier method is a shortcut for getting and setting
+the C<MMHS-Acp127-Message-Identifier> header. This header is described in more
+detail within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_codress_message_indicator
+
+    my $header = $email->mmhs_codress_message_indicator;
+       $header = $email->mmhs_codress_message_indicator('...');
+
+The mmhs_codress_message_indicator method is a shortcut for getting and setting
+the C<MMHS-Codress-Message-Indicator> header. This header is described in more
+detail within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_copy_precedence
+
+    my $header = $email->mmhs_copy_precedence;
+       $header = $email->mmhs_copy_precedence('...');
+
+The mmhs_copy_precedence method is a shortcut for getting and setting the
+C<MMHS-Copy-Precedence> header. This header is described in more detail within
+RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_exempted_address
+
+    my $header = $email->mmhs_exempted_address;
+       $header = $email->mmhs_exempted_address('...');
+
+The mmhs_exempted_address method is a shortcut for getting and setting the
+C<MMHS-Exempted-Address> header. This header is described in more detail within
+RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_extended_authorisation_info
+
+    my $header = $email->mmhs_extended_authorisation_info;
+       $header = $email->mmhs_extended_authorisation_info('...');
+
+The mmhs_extended_authorisation_info method is a shortcut for getting and
+setting the C<MMHS-Extended-Authorisation-Info> header. This header is
+described in more detail within RFC6477 L<http://www.iana.org/go/rfc6477> and
+ACP123 L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_handling_instructions
+
+    my $header = $email->mmhs_handling_instructions;
+       $header = $email->mmhs_handling_instructions('...');
+
+The mmhs_handling_instructions method is a shortcut for getting and setting the
+C<MMHS-Handling-Instructions> header. This header is described in more detail
+within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_message_instructions
+
+    my $header = $email->mmhs_message_instructions;
+       $header = $email->mmhs_message_instructions('...');
+
+The mmhs_message_instructions method is a shortcut for getting and setting the
+C<MMHS-Message-Instructions> header. This header is described in more detail
+within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_message_type
+
+    my $header = $email->mmhs_message_type;
+       $header = $email->mmhs_message_type('...');
+
+The mmhs_message_type method is a shortcut for getting and setting the
+C<MMHS-Message-Type> header. This header is described in more detail within
+RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_originator_plad
+
+    my $header = $email->mmhs_originator_plad;
+       $header = $email->mmhs_originator_plad('...');
+
+The mmhs_originator_plad method is a shortcut for getting and setting the
+C<MMHS-Originator-PLAD> header. This header is described in more detail within
+RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_originator_reference
+
+    my $header = $email->mmhs_originator_reference;
+       $header = $email->mmhs_originator_reference('...');
+
+The mmhs_originator_reference method is a shortcut for getting and setting the
+C<MMHS-Originator-Reference> header. This header is described in more detail
+within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_other_recipients_indicator_cc
+
+    my $header = $email->mmhs_other_recipients_indicator_cc;
+       $header = $email->mmhs_other_recipients_indicator_cc('...');
+
+The mmhs_other_recipients_indicator_cc method is a shortcut for getting and
+setting the C<MMHS-Other-Recipients-Indicator-CC> header. This header is
+described in more detail within RFC6477 L<http://www.iana.org/go/rfc6477> and
+ACP123 L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_other_recipients_indicator_to
+
+    my $header = $email->mmhs_other_recipients_indicator_to;
+       $header = $email->mmhs_other_recipients_indicator_to('...');
+
+The mmhs_other_recipients_indicator_to method is a shortcut for getting and
+setting the C<MMHS-Other-Recipients-Indicator-To> header. This header is
+described in more detail within RFC6477 L<http://www.iana.org/go/rfc6477> and
+ACP123 L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_primary_precedence
+
+    my $header = $email->mmhs_primary_precedence;
+       $header = $email->mmhs_primary_precedence('...');
+
+The mmhs_primary_precedence method is a shortcut for getting and setting the
+C<MMHS-Primary-Precedence> header. This header is described in more detail
+within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mmhs_subject_indicator_codes
+
+    my $header = $email->mmhs_subject_indicator_codes;
+       $header = $email->mmhs_subject_indicator_codes('...');
+
+The mmhs_subject_indicator_codes method is a shortcut for getting and setting
+the C<MMHS-Subject-Indicator-Codes> header. This header is described in more
+detail within RFC6477 L<http://www.iana.org/go/rfc6477> and ACP123
+L<http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf>.
+
+=cut
+
+=method mt_priority
+
+    my $header = $email->mt_priority;
+       $header = $email->mt_priority('...');
+
+The mt_priority method is a shortcut for getting and setting the C<MT-Priority>
+header. This header is described in more detail within RFC6758
+L<http://www.iana.org/go/rfc6758>.
+
+=cut
+
+=method message
+
+    my $data = $email->message({
+        text => '...',
+        html => '...',
+    });
+
+The message method is used for getting and setting the message attribute which
+is used along with the type attribute to determine how the email message should
+be constructed. This attribute can be assigned a string or hash reference with
+text and/or html key/value pairs.
+
+=cut
+
+=method message_context
+
+    my $header = $email->message_context;
+       $header = $email->message_context('...');
+
+The message_context method is a shortcut for getting and setting the
+C<Message-Context> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method message_id
+
+    my $header = $email->message_id;
+       $header = $email->message_id('...');
+
+The message_id method is a shortcut for getting and setting the C<Message-ID>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method message_type
+
+    my $header = $email->message_type;
+       $header = $email->message_type('...');
+
+The message_type method is a shortcut for getting and setting the
+C<Message-Type> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method obsoletes
+
+    my $header = $email->obsoletes;
+       $header = $email->obsoletes('...');
+
+The obsoletes method is a shortcut for getting and setting the C<Obsoletes>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method original_encoded_information_types
+
+    my $header = $email->original_encoded_information_types;
+       $header = $email->original_encoded_information_types('...');
+
+The original_encoded_information_types method is a shortcut for getting and
+setting the C<Original-Encoded-Information-Types> header. This header is
+described in more detail within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method original_from
+
+    my $header = $email->original_from;
+       $header = $email->original_from('...');
+
+The original_from method is a shortcut for getting and setting the
+C<Original-From> header. This header is described in more detail within RFC5703
+L<http://www.iana.org/go/rfc5703>.
+
+=cut
+
+=method original_message_id
+
+    my $header = $email->original_message_id;
+       $header = $email->original_message_id('...');
+
+The original_message_id method is a shortcut for getting and setting the
+C<Original-Message-ID> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method original_recipient
+
+    my $header = $email->original_recipient;
+       $header = $email->original_recipient('...');
+
+The original_recipient method is a shortcut for getting and setting the
+C<Original-Recipient> header. This header is described in more detail within
+RFC3798 L<http://www.iana.org/go/rfc3798> and RFC5337
+L<http://www.iana.org/go/rfc5337>.
+
+=cut
+
+=method original_subject
+
+    my $header = $email->original_subject;
+       $header = $email->original_subject('...');
+
+The original_subject method is a shortcut for getting and setting the
+C<Original-Subject> header. This header is described in more detail within
+RFC5703 L<http://www.iana.org/go/rfc5703>.
+
+=cut
+
+=method originator_return_address
+
+    my $header = $email->originator_return_address;
+       $header = $email->originator_return_address('...');
+
+The originator_return_address method is a shortcut for getting and setting the
+C<Originator-Return-Address> header. This header is described in more detail
+within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method pics_label
+
+    my $header = $email->pics_label;
+       $header = $email->pics_label('...');
+
+The pics_label method is a shortcut for getting and setting the C<PICS-Label>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method prevent_nondelivery_report
+
+    my $header = $email->prevent_nondelivery_report;
+       $header = $email->prevent_nondelivery_report('...');
+
+The prevent_nondelivery_report method is a shortcut for getting and setting the
+C<Prevent-NonDelivery-Report> header. This header is described in more detail
+within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method priority
+
+    my $header = $email->priority;
+       $header = $email->priority('...');
+
+The priority method is a shortcut for getting and setting the C<Priority>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method privicon
+
+    my $header = $email->privicon;
+       $header = $email->privicon('...');
+
+The privicon method is a shortcut for getting and setting the C<Privicon>
+header. This header is described in more detail within
+L<http://www.iana.org/go/draft-koenig-privicons>.
+
+=cut
+
+=method received
+
+    my $header = $email->received;
+       $header = $email->received('...');
+
+The received method is a shortcut for getting and setting the C<Received>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322> and RFC5321
+L<http://www.iana.org/go/rfc5321>.
+
+=cut
+
+=method received_spf
+
+    my $header = $email->received_spf;
+       $header = $email->received_spf('...');
+
+The received_spf method is a shortcut for getting and setting the
+C<Received-SPF> header. This header is described in more detail within RFC7208
+L<http://www.iana.org/go/rfc7208>.
+
+=cut
+
+=method references
+
+    my $header = $email->references;
+       $header = $email->references('...');
+
+The references method is a shortcut for getting and setting the C<References>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method reply_by
+
+    my $header = $email->reply_by;
+       $header = $email->reply_by('...');
+
+The reply_by method is a shortcut for getting and setting the C<Reply-By>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method reply_to
+
+    my $header = $email->reply_to;
+       $header = $email->reply_to('...');
+
+The reply_to method is a shortcut for getting and setting the C<Reply-To>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method require_recipient_valid_since
+
+    my $header = $email->require_recipient_valid_since;
+       $header = $email->require_recipient_valid_since('...');
+
+The require_recipient_valid_since method is a shortcut for getting and setting
+the C<Require-Recipient-Valid-Since> header. This header is described in more
+detail within RFC7293 L<http://www.iana.org/go/rfc7293>.
+
+=cut
+
+=method resent_bcc
+
+    my $header = $email->resent_bcc;
+       $header = $email->resent_bcc('...');
+
+The resent_bcc method is a shortcut for getting and setting the C<Resent-Bcc>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method resent_cc
+
+    my $header = $email->resent_cc;
+       $header = $email->resent_cc('...');
+
+The resent_cc method is a shortcut for getting and setting the C<Resent-Cc>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method resent_date
+
+    my $header = $email->resent_date;
+       $header = $email->resent_date('...');
+
+The resent_date method is a shortcut for getting and setting the C<Resent-Date>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method resent_from
+
+    my $header = $email->resent_from;
+       $header = $email->resent_from('...');
+
+The resent_from method is a shortcut for getting and setting the C<Resent-From>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322> and RFC6854
+L<http://www.iana.org/go/rfc6854>.
+
+=cut
+
+=method resent_message_id
+
+    my $header = $email->resent_message_id;
+       $header = $email->resent_message_id('...');
+
+The resent_message_id method is a shortcut for getting and setting the
+C<Resent-Message-ID> header. This header is described in more detail within
+RFC5322 L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method resent_reply_to
+
+    my $header = $email->resent_reply_to;
+       $header = $email->resent_reply_to('...');
+
+The resent_reply_to method is a shortcut for getting and setting the
+C<Resent-Reply-To> header. This header is described in more detail within
+RFC5322 L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method resent_sender
+
+    my $header = $email->resent_sender;
+       $header = $email->resent_sender('...');
+
+The resent_sender method is a shortcut for getting and setting the
+C<Resent-Sender> header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322> and RFC6854
+L<http://www.iana.org/go/rfc6854>.
+
+=cut
+
+=method resent_to
+
+    my $header = $email->resent_to;
+       $header = $email->resent_to('...');
+
+The resent_to method is a shortcut for getting and setting the C<Resent-To>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method return_path
+
+    my $header = $email->return_path;
+       $header = $email->return_path('...');
+
+The return_path method is a shortcut for getting and setting the C<Return-Path>
+header. This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method sio_label
+
+    my $header = $email->sio_label;
+       $header = $email->sio_label('...');
+
+The sio_label method is a shortcut for getting and setting the C<SIO-Label>
+header. This header is described in more detail within RFC7444
+L<http://www.iana.org/go/rfc7444>.
+
+=cut
+
+=method sio_label_history
+
+    my $header = $email->sio_label_history;
+       $header = $email->sio_label_history('...');
+
+The sio_label_history method is a shortcut for getting and setting the
+C<SIO-Label-History> header. This header is described in more detail within
+RFC7444 L<http://www.iana.org/go/rfc7444>.
+
+=cut
+
+=method send
+
+    my $result = $email->send($attributes, @transport_args);
+
+The send method generates a L<Email::Stuffer> object based on the stashed and
+passed in attributes, and attempts delivery using the configured transport.
+
+=cut
+
+=method sender
+
+    my $header = $email->sender;
+       $header = $email->sender('...');
+
+The sender method is a shortcut for getting and setting the C<Sender> header.
+This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322> and RFC6854
+L<http://www.iana.org/go/rfc6854>.
+
+=cut
+
+=method sensitivity
+
+    my $header = $email->sensitivity;
+       $header = $email->sensitivity('...');
+
+The sensitivity method is a shortcut for getting and setting the C<Sensitivity>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method solicitation
+
+    my $header = $email->solicitation;
+       $header = $email->solicitation('...');
+
+The solicitation method is a shortcut for getting and setting the
+C<Solicitation> header. This header is described in more detail within RFC3865
+L<http://www.iana.org/go/rfc3865>.
+
+=cut
+
+=method subject
+
+    my $header = $email->subject;
+       $header = $email->subject('...');
+
+The subject method is a shortcut for getting and setting the C<Subject> header.
+This header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method supersedes
+
+    my $header = $email->supersedes;
+       $header = $email->supersedes('...');
+
+The supersedes method is a shortcut for getting and setting the C<Supersedes>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method to
+
+    my $header = $email->to;
+       $header = $email->to('...');
+
+The to method is a shortcut for getting and setting the C<To> header. This
+header is described in more detail within RFC5322
+L<http://www.iana.org/go/rfc5322>.
+
+=cut
+
+=method vbr_info
+
+    my $header = $email->vbr_info;
+       $header = $email->vbr_info('...');
+
+The vbr_info method is a shortcut for getting and setting the C<VBR-Info>
+header. This header is described in more detail within RFC5518
+L<http://www.iana.org/go/rfc5518>.
+
+=cut
+
+=method x_archived_at
+
+    my $header = $email->x_archived_at;
+       $header = $email->x_archived_at('...');
+
+The x_archived_at method is a shortcut for getting and setting the
+C<X-Archived-At> header. This header is described in more detail within RFC5064
+L<http://www.iana.org/go/rfc5064>.
+
+=cut
+
+=method x400_content_identifier
+
+    my $header = $email->x400_content_identifier;
+       $header = $email->x400_content_identifier('...');
+
+The x400_content_identifier method is a shortcut for getting and setting the
+C<X400-Content-Identifier> header. This header is described in more detail
+within RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_content_return
+
+    my $header = $email->x400_content_return;
+       $header = $email->x400_content_return('...');
+
+The x400_content_return method is a shortcut for getting and setting the
+C<X400-Content-Return> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_content_type
+
+    my $header = $email->x400_content_type;
+       $header = $email->x400_content_type('...');
+
+The x400_content_type method is a shortcut for getting and setting the
+C<X400-Content-Type> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_mts_identifier
+
+    my $header = $email->x400_mts_identifier;
+       $header = $email->x400_mts_identifier('...');
+
+The x400_mts_identifier method is a shortcut for getting and setting the
+C<X400-MTS-Identifier> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_originator
+
+    my $header = $email->x400_originator;
+       $header = $email->x400_originator('...');
+
+The x400_originator method is a shortcut for getting and setting the
+C<X400-Originator> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_received
+
+    my $header = $email->x400_received;
+       $header = $email->x400_received('...');
+
+The x400_received method is a shortcut for getting and setting the
+C<X400-Received> header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_recipients
+
+    my $header = $email->x400_recipients;
+       $header = $email->x400_recipients('...');
+
+The x400_recipients method is a shortcut for getting and setting the
+C<X400-Recipients> header. This header is described in more detail within
+RFC4021 L<http://www.iana.org/go/rfc4021>.
+
+=cut
+
+=method x400_trace
+
+    my $header = $email->x400_trace;
+       $header = $email->x400_trace('...');
+
+The x400_trace method is a shortcut for getting and setting the C<X400-Trace>
+header. This header is described in more detail within RFC4021
+L<http://www.iana.org/go/rfc4021>.
+
+=cut
+

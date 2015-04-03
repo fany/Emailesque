@@ -1,8 +1,0 @@
-v1.21
-
- - Fix declaration warning.
- - Updated dist.ini.
- - Updated build.
- - Refactored using Data::Object for better OO.
- - Fix pod fix
- - Fixes for pod

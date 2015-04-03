@@ -14,6 +14,7 @@
 /todos
 Emailesque-*
 Emailesque-*/*
+DZP-*
 Build
 Build.bat
 MANIFEST.bak
@@ -33,4 +34,4 @@ tags
 vagrantfile
 /devel/
 *.pl
-headers.txt
+headers.*
