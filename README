@@ -1,3 +1,11 @@
+NAME
+
+    Emailesque - Lightweight To-The-Point Email
+
+VERSION
+
+    version 1.26
+
 SYNOPSIS
 
         use Emailesque qw(
@@ -24,13 +32,13 @@ OVERVIEW
 
         use Emailesque;
     
-        my $email = Emailesque->new({
+        my $email = Emailesque->new(
             to      => '...',
             from    => '...',
             subject => '...',
             message => '...',
             files   => [ '/path/to/file/1', '/path/to/file/2' ],
-        });
+        );
     
         my $result = $email->send;
     
@@ -46,13 +54,13 @@ OVERVIEW
 
         use Emailesque;
     
-        my $email = Emailesque->new({
+        my $email = Emailesque->new(
             from     => '...',
             subject  => '...',
             x_mailer => "MyApp-Newletter 0.019876",
             x_url    => "https://mail.to/u/123/welcome",
             type     => 'text',
-        });
+        );
     
         for my $user (@users) {
             my $message = msg_generation $user;
@@ -153,12 +161,18 @@ OVERVIEW
             path    => '/usr/bin/sendmail',
         })
 
+METHODS
+
+ accept_language
+
         my $header = $email->accept_language;
            $header = $email->accept_language('...');
 
     The accept_language method is a shortcut for getting and setting the
     Accept-Language header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ alternate_recipient
 
         my $header = $email->alternate_recipient;
            $header = $email->alternate_recipient('...');
@@ -167,12 +181,16 @@ OVERVIEW
     the Alternate-Recipient header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
 
+ apparently_to
+
         my $header = $email->apparently_to;
            $header = $email->apparently_to('...');
 
     The apparently_to method is a shortcut for getting and setting the
     Apparently-To header. This header is described in more detail within
     RFC2076 http://www.iana.org/go/rfc2076.
+
+ archived_at
 
         my $header = $email->archived_at;
            $header = $email->archived_at('...');
@@ -181,12 +199,16 @@ OVERVIEW
     Archived-At header. This header is described in more detail within
     RFC5064 http://www.iana.org/go/rfc5064.
 
+ authentication_results
+
         my $header = $email->authentication_results;
            $header = $email->authentication_results('...');
 
     The authentication_results method is a shortcut for getting and setting
     the Authentication-Results header. This header is described in more
     detail within RFC7001 http://www.iana.org/go/rfc7001.
+
+ auto_submitted
 
         my $header = $email->auto_submitted;
            $header = $email->auto_submitted('...');
@@ -195,12 +217,16 @@ OVERVIEW
     Auto-Submitted header. This header is described in more detail within
     RFC3834 http://www.iana.org/go/rfc3834.
 
+ autoforwarded
+
         my $header = $email->autoforwarded;
            $header = $email->autoforwarded('...');
 
     The autoforwarded method is a shortcut for getting and setting the
     Autoforwarded header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ autosubmitted
 
         my $header = $email->autosubmitted;
            $header = $email->autosubmitted('...');
@@ -209,12 +235,16 @@ OVERVIEW
     Autosubmitted header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ bcc
+
         my $header = $email->bcc;
            $header = $email->bcc('...');
 
     The bcc method is a shortcut for getting and setting the Bcc header.
     This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
+
+ cc
 
         my $header = $email->cc;
            $header = $email->cc('...');
@@ -223,12 +253,16 @@ OVERVIEW
     header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
 
+ comments
+
         my $header = $email->comments;
            $header = $email->comments('...');
 
     The comments method is a shortcut for getting and setting the Comments
     header. This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
+
+ content_identifier
 
         my $header = $email->content_identifier;
            $header = $email->content_identifier('...');
@@ -237,12 +271,16 @@ OVERVIEW
     Content-Identifier header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
 
+ content_return
+
         my $header = $email->content_return;
            $header = $email->content_return('...');
 
     The content_return method is a shortcut for getting and setting the
     Content-Return header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ conversion
 
         my $header = $email->conversion;
            $header = $email->conversion('...');
@@ -251,12 +289,16 @@ OVERVIEW
     Conversion header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ conversion_with_loss
+
         my $header = $email->conversion_with_loss;
            $header = $email->conversion_with_loss('...');
 
     The conversion_with_loss method is a shortcut for getting and setting
     the Conversion-With-Loss header. This header is described in more
     detail within RFC4021 http://www.iana.org/go/rfc4021.
+
+ dkim_signature
 
         my $header = $email->dkim_signature;
            $header = $email->dkim_signature('...');
@@ -265,12 +307,16 @@ OVERVIEW
     DKIM-Signature header. This header is described in more detail within
     RFC6376 http://www.iana.org/go/rfc6376.
 
+ dl_expansion_history
+
         my $header = $email->dl_expansion_history;
            $header = $email->dl_expansion_history('...');
 
     The dl_expansion_history method is a shortcut for getting and setting
     the DL-Expansion-History header. This header is described in more
     detail within RFC4021 http://www.iana.org/go/rfc4021.
+
+ date
 
         my $header = $email->date;
            $header = $email->date('...');
@@ -279,12 +325,16 @@ OVERVIEW
     This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
 
+ deferred_delivery
+
         my $header = $email->deferred_delivery;
            $header = $email->deferred_delivery('...');
 
     The deferred_delivery method is a shortcut for getting and setting the
     Deferred-Delivery header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
+
+ delivery_date
 
         my $header = $email->delivery_date;
            $header = $email->delivery_date('...');
@@ -293,12 +343,16 @@ OVERVIEW
     Delivery-Date header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ discarded_x400_ipms_extensions
+
         my $header = $email->discarded_x400_ipms_extensions;
            $header = $email->discarded_x400_ipms_extensions('...');
 
     The discarded_x400_ipms_extensions method is a shortcut for getting and
     setting the Discarded-X400-IPMS-Extensions header. This header is
     described in more detail within RFC4021 http://www.iana.org/go/rfc4021.
+
+ discarded_x400_mts_extensions
 
         my $header = $email->discarded_x400_mts_extensions;
            $header = $email->discarded_x400_mts_extensions('...');
@@ -307,12 +361,16 @@ OVERVIEW
     setting the Discarded-X400-MTS-Extensions header. This header is
     described in more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ disclose_recipients
+
         my $header = $email->disclose_recipients;
            $header = $email->disclose_recipients('...');
 
     The disclose_recipients method is a shortcut for getting and setting
     the Disclose-Recipients header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
+
+ disposition_notification_options
 
         my $header = $email->disposition_notification_options;
            $header = $email->disposition_notification_options('...');
@@ -321,12 +379,16 @@ OVERVIEW
     and setting the Disposition-Notification-Options header. This header is
     described in more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ disposition_notification_to
+
         my $header = $email->disposition_notification_to;
            $header = $email->disposition_notification_to('...');
 
     The disposition_notification_to method is a shortcut for getting and
     setting the Disposition-Notification-To header. This header is
     described in more detail within RFC4021 http://www.iana.org/go/rfc4021.
+
+ downgraded_bcc
 
         my $header = $email->downgraded_bcc;
            $header = $email->downgraded_bcc('...');
@@ -336,6 +398,8 @@ OVERVIEW
     RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_cc
+
         my $header = $email->downgraded_cc;
            $header = $email->downgraded_cc('...');
 
@@ -343,6 +407,8 @@ OVERVIEW
     Downgraded-Cc header. This header is described in more detail within
     RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
+
+ downgraded_disposition_notification_to
 
         my $header = $email->downgraded_disposition_notification_to;
            $header = $email->downgraded_disposition_notification_to('...');
@@ -353,12 +419,16 @@ OVERVIEW
     http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_final_recipient
+
         my $header = $email->downgraded_final_recipient;
            $header = $email->downgraded_final_recipient('...');
 
     The downgraded_final_recipient method is a shortcut for getting and
     setting the Downgraded-Final-Recipient header. This header is described
     in more detail within RFC6857 http://www.iana.org/go/rfc6857.
+
+ downgraded_from
 
         my $header = $email->downgraded_from;
            $header = $email->downgraded_from('...');
@@ -368,12 +438,16 @@ OVERVIEW
     RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_in_reply_to
+
         my $header = $email->downgraded_in_reply_to;
            $header = $email->downgraded_in_reply_to('...');
 
     The downgraded_in_reply_to method is a shortcut for getting and setting
     the Downgraded-In-Reply-To header. This header is described in more
     detail within RFC6857 http://www.iana.org/go/rfc6857.
+
+ downgraded_mail_from
 
         my $header = $email->downgraded_mail_from;
            $header = $email->downgraded_mail_from('...');
@@ -383,6 +457,8 @@ OVERVIEW
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_message_id
+
         my $header = $email->downgraded_message_id;
            $header = $email->downgraded_message_id('...');
 
@@ -390,12 +466,16 @@ OVERVIEW
     the Downgraded-Message-Id header. This header is described in more
     detail within RFC6857 http://www.iana.org/go/rfc6857.
 
+ downgraded_original_recipient
+
         my $header = $email->downgraded_original_recipient;
            $header = $email->downgraded_original_recipient('...');
 
     The downgraded_original_recipient method is a shortcut for getting and
     setting the Downgraded-Original-Recipient header. This header is
     described in more detail within RFC6857 http://www.iana.org/go/rfc6857.
+
+ downgraded_rcpt_to
 
         my $header = $email->downgraded_rcpt_to;
            $header = $email->downgraded_rcpt_to('...');
@@ -405,12 +485,16 @@ OVERVIEW
     within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_references
+
         my $header = $email->downgraded_references;
            $header = $email->downgraded_references('...');
 
     The downgraded_references method is a shortcut for getting and setting
     the Downgraded-References header. This header is described in more
     detail within RFC6857 http://www.iana.org/go/rfc6857.
+
+ downgraded_reply_to
 
         my $header = $email->downgraded_reply_to;
            $header = $email->downgraded_reply_to('...');
@@ -420,6 +504,8 @@ OVERVIEW
     within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_resent_bcc
+
         my $header = $email->downgraded_resent_bcc;
            $header = $email->downgraded_resent_bcc('...');
 
@@ -427,6 +513,8 @@ OVERVIEW
     the Downgraded-Resent-Bcc header. This header is described in more
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
+
+ downgraded_resent_cc
 
         my $header = $email->downgraded_resent_cc;
            $header = $email->downgraded_resent_cc('...');
@@ -436,6 +524,8 @@ OVERVIEW
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_resent_from
+
         my $header = $email->downgraded_resent_from;
            $header = $email->downgraded_resent_from('...');
 
@@ -443,6 +533,8 @@ OVERVIEW
     the Downgraded-Resent-From header. This header is described in more
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
+
+ downgraded_resent_reply_to
 
         my $header = $email->downgraded_resent_reply_to;
            $header = $email->downgraded_resent_reply_to('...');
@@ -452,6 +544,8 @@ OVERVIEW
     in more detail within RFC5504 http://www.iana.org/go/rfc5504 and
     RFC6857 http://www.iana.org/go/rfc6857.
 
+ downgraded_resent_sender
+
         my $header = $email->downgraded_resent_sender;
            $header = $email->downgraded_resent_sender('...');
 
@@ -459,6 +553,8 @@ OVERVIEW
     setting the Downgraded-Resent-Sender header. This header is described
     in more detail within RFC5504 http://www.iana.org/go/rfc5504 and
     RFC6857 http://www.iana.org/go/rfc6857.
+
+ downgraded_resent_to
 
         my $header = $email->downgraded_resent_to;
            $header = $email->downgraded_resent_to('...');
@@ -468,6 +564,8 @@ OVERVIEW
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_return_path
+
         my $header = $email->downgraded_return_path;
            $header = $email->downgraded_return_path('...');
 
@@ -475,6 +573,8 @@ OVERVIEW
     the Downgraded-Return-Path header. This header is described in more
     detail within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
+
+ downgraded_sender
 
         my $header = $email->downgraded_sender;
            $header = $email->downgraded_sender('...');
@@ -484,6 +584,8 @@ OVERVIEW
     within RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ downgraded_to
+
         my $header = $email->downgraded_to;
            $header = $email->downgraded_to('...');
 
@@ -492,12 +594,16 @@ OVERVIEW
     RFC5504 http://www.iana.org/go/rfc5504 and RFC6857
     http://www.iana.org/go/rfc6857.
 
+ ediint_features
+
         my $header = $email->ediint_features;
            $header = $email->ediint_features('...');
 
     The ediint_features method is a shortcut for getting and setting the
     EDIINT-Features header. This header is described in more detail within
     RFC6017 http://www.iana.org/go/rfc6017.
+
+ encoding
 
         my $header = $email->encoding;
            $header = $email->encoding('...');
@@ -506,12 +612,16 @@ OVERVIEW
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
 
+ encrypted
+
         my $header = $email->encrypted;
            $header = $email->encrypted('...');
 
     The encrypted method is a shortcut for getting and setting the
     Encrypted header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ errors_to
 
         my $header = $email->errors_to;
            $header = $email->errors_to('...');
@@ -520,6 +630,8 @@ OVERVIEW
     Errors-To header. This header is described in more detail within
     RFC2076 http://www.iana.org/go/rfc2076.
 
+ expires
+
         my $header = $email->expires;
            $header = $email->expires('...');
 
@@ -527,12 +639,16 @@ OVERVIEW
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
 
+ expiry_date
+
         my $header = $email->expiry_date;
            $header = $email->expiry_date('...');
 
     The expiry_date method is a shortcut for getting and setting the
     Expiry-Date header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ from
 
         my $header = $email->from;
            $header = $email->from('...');
@@ -542,6 +658,8 @@ OVERVIEW
     http://www.iana.org/go/rfc5322 and RFC6854
     http://www.iana.org/go/rfc6854.
 
+ generate_delivery_report
+
         my $header = $email->generate_delivery_report;
            $header = $email->generate_delivery_report('...');
 
@@ -549,11 +667,15 @@ OVERVIEW
     setting the Generate-Delivery-Report header. This header is described
     in more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ header
+
         my $header = $email->header('X-Tag');
            $header = $email->header('X-Tag', '...');
 
     The header method is used for getting and setting arbitrary headers by
     name.
+
+ importance
 
         my $header = $email->importance;
            $header = $email->importance('...');
@@ -562,12 +684,16 @@ OVERVIEW
     Importance header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ in_reply_to
+
         my $header = $email->in_reply_to;
            $header = $email->in_reply_to('...');
 
     The in_reply_to method is a shortcut for getting and setting the
     In-Reply-To header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
+
+ incomplete_copy
 
         my $header = $email->incomplete_copy;
            $header = $email->incomplete_copy('...');
@@ -576,12 +702,16 @@ OVERVIEW
     Incomplete-Copy header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ jabber_id
+
         my $header = $email->jabber_id;
            $header = $email->jabber_id('...');
 
     The jabber_id method is a shortcut for getting and setting the
     Jabber-ID header. This header is described in more detail within
     RFC7259 http://www.iana.org/go/rfc7259.
+
+ keywords
 
         my $header = $email->keywords;
            $header = $email->keywords('...');
@@ -590,12 +720,16 @@ OVERVIEW
     header. This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
 
+ language
+
         my $header = $email->language;
            $header = $email->language('...');
 
     The language method is a shortcut for getting and setting the Language
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
+
+ latest_delivery_time
 
         my $header = $email->latest_delivery_time;
            $header = $email->latest_delivery_time('...');
@@ -604,12 +738,16 @@ OVERVIEW
     the Latest-Delivery-Time header. This header is described in more
     detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ list_archive
+
         my $header = $email->list_archive;
            $header = $email->list_archive('...');
 
     The list_archive method is a shortcut for getting and setting the
     List-Archive header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ list_help
 
         my $header = $email->list_help;
            $header = $email->list_help('...');
@@ -618,12 +756,16 @@ OVERVIEW
     List-Help header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ list_id
+
         my $header = $email->list_id;
            $header = $email->list_id('...');
 
     The list_id method is a shortcut for getting and setting the List-ID
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
+
+ list_owner
 
         my $header = $email->list_owner;
            $header = $email->list_owner('...');
@@ -632,12 +774,16 @@ OVERVIEW
     List-Owner header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ list_post
+
         my $header = $email->list_post;
            $header = $email->list_post('...');
 
     The list_post method is a shortcut for getting and setting the
     List-Post header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ list_subscribe
 
         my $header = $email->list_subscribe;
            $header = $email->list_subscribe('...');
@@ -646,12 +792,16 @@ OVERVIEW
     List-Subscribe header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ list_unsubscribe
+
         my $header = $email->list_unsubscribe;
            $header = $email->list_unsubscribe('...');
 
     The list_unsubscribe method is a shortcut for getting and setting the
     List-Unsubscribe header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ mmhs_acp127_message_identifier
 
         my $header = $email->mmhs_acp127_message_identifier;
            $header = $email->mmhs_acp127_message_identifier('...');
@@ -661,6 +811,8 @@ OVERVIEW
     described in more detail within RFC6477 http://www.iana.org/go/rfc6477
     and ACP123 http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_codress_message_indicator
+
         my $header = $email->mmhs_codress_message_indicator;
            $header = $email->mmhs_codress_message_indicator('...');
 
@@ -668,6 +820,8 @@ OVERVIEW
     setting the MMHS-Codress-Message-Indicator header. This header is
     described in more detail within RFC6477 http://www.iana.org/go/rfc6477
     and ACP123 http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_copy_precedence
 
         my $header = $email->mmhs_copy_precedence;
            $header = $email->mmhs_copy_precedence('...');
@@ -677,6 +831,8 @@ OVERVIEW
     detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_exempted_address
+
         my $header = $email->mmhs_exempted_address;
            $header = $email->mmhs_exempted_address('...');
 
@@ -684,6 +840,8 @@ OVERVIEW
     the MMHS-Exempted-Address header. This header is described in more
     detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_extended_authorisation_info
 
         my $header = $email->mmhs_extended_authorisation_info;
            $header = $email->mmhs_extended_authorisation_info('...');
@@ -693,6 +851,8 @@ OVERVIEW
     described in more detail within RFC6477 http://www.iana.org/go/rfc6477
     and ACP123 http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_handling_instructions
+
         my $header = $email->mmhs_handling_instructions;
            $header = $email->mmhs_handling_instructions('...');
 
@@ -700,6 +860,8 @@ OVERVIEW
     setting the MMHS-Handling-Instructions header. This header is described
     in more detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_message_instructions
 
         my $header = $email->mmhs_message_instructions;
            $header = $email->mmhs_message_instructions('...');
@@ -709,6 +871,8 @@ OVERVIEW
     in more detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_message_type
+
         my $header = $email->mmhs_message_type;
            $header = $email->mmhs_message_type('...');
 
@@ -716,6 +880,8 @@ OVERVIEW
     MMHS-Message-Type header. This header is described in more detail
     within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_originator_plad
 
         my $header = $email->mmhs_originator_plad;
            $header = $email->mmhs_originator_plad('...');
@@ -725,6 +891,8 @@ OVERVIEW
     detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_originator_reference
+
         my $header = $email->mmhs_originator_reference;
            $header = $email->mmhs_originator_reference('...');
 
@@ -732,6 +900,8 @@ OVERVIEW
     setting the MMHS-Originator-Reference header. This header is described
     in more detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_other_recipients_indicator_cc
 
         my $header = $email->mmhs_other_recipients_indicator_cc;
            $header = $email->mmhs_other_recipients_indicator_cc('...');
@@ -742,6 +912,8 @@ OVERVIEW
     http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_other_recipients_indicator_to
+
         my $header = $email->mmhs_other_recipients_indicator_to;
            $header = $email->mmhs_other_recipients_indicator_to('...');
 
@@ -751,6 +923,8 @@ OVERVIEW
     http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mmhs_primary_precedence
+
         my $header = $email->mmhs_primary_precedence;
            $header = $email->mmhs_primary_precedence('...');
 
@@ -758,6 +932,8 @@ OVERVIEW
     setting the MMHS-Primary-Precedence header. This header is described in
     more detail within RFC6477 http://www.iana.org/go/rfc6477 and ACP123
     http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
+
+ mmhs_subject_indicator_codes
 
         my $header = $email->mmhs_subject_indicator_codes;
            $header = $email->mmhs_subject_indicator_codes('...');
@@ -767,12 +943,16 @@ OVERVIEW
     described in more detail within RFC6477 http://www.iana.org/go/rfc6477
     and ACP123 http://jcs.dtic.mil/j6/cceb/acps/acp123/ACP123B.pdf.
 
+ mt_priority
+
         my $header = $email->mt_priority;
            $header = $email->mt_priority('...');
 
     The mt_priority method is a shortcut for getting and setting the
     MT-Priority header. This header is described in more detail within
     RFC6758 http://www.iana.org/go/rfc6758.
+
+ message
 
         my $data = $email->message({
             text => '...',
@@ -784,12 +964,16 @@ OVERVIEW
     the email message should be constructed. This attribute can be assigned
     a string or hash reference with text and/or html key/value pairs.
 
+ message_context
+
         my $header = $email->message_context;
            $header = $email->message_context('...');
 
     The message_context method is a shortcut for getting and setting the
     Message-Context header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ message_id
 
         my $header = $email->message_id;
            $header = $email->message_id('...');
@@ -798,6 +982,8 @@ OVERVIEW
     Message-ID header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
 
+ message_type
+
         my $header = $email->message_type;
            $header = $email->message_type('...');
 
@@ -805,12 +991,16 @@ OVERVIEW
     Message-Type header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ obsoletes
+
         my $header = $email->obsoletes;
            $header = $email->obsoletes('...');
 
     The obsoletes method is a shortcut for getting and setting the
     Obsoletes header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ original_encoded_information_types
 
         my $header = $email->original_encoded_information_types;
            $header = $email->original_encoded_information_types('...');
@@ -820,6 +1010,8 @@ OVERVIEW
     is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
 
+ original_from
+
         my $header = $email->original_from;
            $header = $email->original_from('...');
 
@@ -827,12 +1019,16 @@ OVERVIEW
     Original-From header. This header is described in more detail within
     RFC5703 http://www.iana.org/go/rfc5703.
 
+ original_message_id
+
         my $header = $email->original_message_id;
            $header = $email->original_message_id('...');
 
     The original_message_id method is a shortcut for getting and setting
     the Original-Message-ID header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
+
+ original_recipient
 
         my $header = $email->original_recipient;
            $header = $email->original_recipient('...');
@@ -842,12 +1038,16 @@ OVERVIEW
     within RFC3798 http://www.iana.org/go/rfc3798 and RFC5337
     http://www.iana.org/go/rfc5337.
 
+ original_subject
+
         my $header = $email->original_subject;
            $header = $email->original_subject('...');
 
     The original_subject method is a shortcut for getting and setting the
     Original-Subject header. This header is described in more detail within
     RFC5703 http://www.iana.org/go/rfc5703.
+
+ originator_return_address
 
         my $header = $email->originator_return_address;
            $header = $email->originator_return_address('...');
@@ -856,12 +1056,16 @@ OVERVIEW
     setting the Originator-Return-Address header. This header is described
     in more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ pics_label
+
         my $header = $email->pics_label;
            $header = $email->pics_label('...');
 
     The pics_label method is a shortcut for getting and setting the
     PICS-Label header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ prevent_nondelivery_report
 
         my $header = $email->prevent_nondelivery_report;
            $header = $email->prevent_nondelivery_report('...');
@@ -870,6 +1074,8 @@ OVERVIEW
     setting the Prevent-NonDelivery-Report header. This header is described
     in more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ priority
+
         my $header = $email->priority;
            $header = $email->priority('...');
 
@@ -877,12 +1083,16 @@ OVERVIEW
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
 
+ privicon
+
         my $header = $email->privicon;
            $header = $email->privicon('...');
 
     The privicon method is a shortcut for getting and setting the Privicon
     header. This header is described in more detail within
     http://www.iana.org/go/draft-koenig-privicons.
+
+ received
 
         my $header = $email->received;
            $header = $email->received('...');
@@ -892,12 +1102,16 @@ OVERVIEW
     http://www.iana.org/go/rfc5322 and RFC5321
     http://www.iana.org/go/rfc5321.
 
+ received_spf
+
         my $header = $email->received_spf;
            $header = $email->received_spf('...');
 
     The received_spf method is a shortcut for getting and setting the
     Received-SPF header. This header is described in more detail within
     RFC7208 http://www.iana.org/go/rfc7208.
+
+ references
 
         my $header = $email->references;
            $header = $email->references('...');
@@ -906,12 +1120,16 @@ OVERVIEW
     References header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
 
+ reply_by
+
         my $header = $email->reply_by;
            $header = $email->reply_by('...');
 
     The reply_by method is a shortcut for getting and setting the Reply-By
     header. This header is described in more detail within RFC4021
     http://www.iana.org/go/rfc4021.
+
+ reply_to
 
         my $header = $email->reply_to;
            $header = $email->reply_to('...');
@@ -920,12 +1138,16 @@ OVERVIEW
     header. This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
 
+ require_recipient_valid_since
+
         my $header = $email->require_recipient_valid_since;
            $header = $email->require_recipient_valid_since('...');
 
     The require_recipient_valid_since method is a shortcut for getting and
     setting the Require-Recipient-Valid-Since header. This header is
     described in more detail within RFC7293 http://www.iana.org/go/rfc7293.
+
+ resent_bcc
 
         my $header = $email->resent_bcc;
            $header = $email->resent_bcc('...');
@@ -934,6 +1156,8 @@ OVERVIEW
     Resent-Bcc header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
 
+ resent_cc
+
         my $header = $email->resent_cc;
            $header = $email->resent_cc('...');
 
@@ -941,12 +1165,16 @@ OVERVIEW
     Resent-Cc header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
 
+ resent_date
+
         my $header = $email->resent_date;
            $header = $email->resent_date('...');
 
     The resent_date method is a shortcut for getting and setting the
     Resent-Date header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
+
+ resent_from
 
         my $header = $email->resent_from;
            $header = $email->resent_from('...');
@@ -956,6 +1184,8 @@ OVERVIEW
     RFC5322 http://www.iana.org/go/rfc5322 and RFC6854
     http://www.iana.org/go/rfc6854.
 
+ resent_message_id
+
         my $header = $email->resent_message_id;
            $header = $email->resent_message_id('...');
 
@@ -963,12 +1193,16 @@ OVERVIEW
     Resent-Message-ID header. This header is described in more detail
     within RFC5322 http://www.iana.org/go/rfc5322.
 
+ resent_reply_to
+
         my $header = $email->resent_reply_to;
            $header = $email->resent_reply_to('...');
 
     The resent_reply_to method is a shortcut for getting and setting the
     Resent-Reply-To header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
+
+ resent_sender
 
         my $header = $email->resent_sender;
            $header = $email->resent_sender('...');
@@ -978,12 +1212,16 @@ OVERVIEW
     RFC5322 http://www.iana.org/go/rfc5322 and RFC6854
     http://www.iana.org/go/rfc6854.
 
+ resent_to
+
         my $header = $email->resent_to;
            $header = $email->resent_to('...');
 
     The resent_to method is a shortcut for getting and setting the
     Resent-To header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
+
+ return_path
 
         my $header = $email->return_path;
            $header = $email->return_path('...');
@@ -992,12 +1230,16 @@ OVERVIEW
     Return-Path header. This header is described in more detail within
     RFC5322 http://www.iana.org/go/rfc5322.
 
+ sio_label
+
         my $header = $email->sio_label;
            $header = $email->sio_label('...');
 
     The sio_label method is a shortcut for getting and setting the
     SIO-Label header. This header is described in more detail within
     RFC7444 http://www.iana.org/go/rfc7444.
+
+ sio_label_history
 
         my $header = $email->sio_label_history;
            $header = $email->sio_label_history('...');
@@ -1006,11 +1248,15 @@ OVERVIEW
     SIO-Label-History header. This header is described in more detail
     within RFC7444 http://www.iana.org/go/rfc7444.
 
+ send
+
         my $result = $email->send($attributes, @transport_args);
 
     The send method generates a Email::Stuffer object based on the stashed
     and passed in attributes, and attempts delivery using the configured
     transport.
+
+ sender
 
         my $header = $email->sender;
            $header = $email->sender('...');
@@ -1020,12 +1266,16 @@ OVERVIEW
     http://www.iana.org/go/rfc5322 and RFC6854
     http://www.iana.org/go/rfc6854.
 
+ sensitivity
+
         my $header = $email->sensitivity;
            $header = $email->sensitivity('...');
 
     The sensitivity method is a shortcut for getting and setting the
     Sensitivity header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ solicitation
 
         my $header = $email->solicitation;
            $header = $email->solicitation('...');
@@ -1034,12 +1284,16 @@ OVERVIEW
     Solicitation header. This header is described in more detail within
     RFC3865 http://www.iana.org/go/rfc3865.
 
+ subject
+
         my $header = $email->subject;
            $header = $email->subject('...');
 
     The subject method is a shortcut for getting and setting the Subject
     header. This header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
+
+ supersedes
 
         my $header = $email->supersedes;
            $header = $email->supersedes('...');
@@ -1048,12 +1302,16 @@ OVERVIEW
     Supersedes header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ to
+
         my $header = $email->to;
            $header = $email->to('...');
 
     The to method is a shortcut for getting and setting the To header. This
     header is described in more detail within RFC5322
     http://www.iana.org/go/rfc5322.
+
+ vbr_info
 
         my $header = $email->vbr_info;
            $header = $email->vbr_info('...');
@@ -1062,12 +1320,16 @@ OVERVIEW
     header. This header is described in more detail within RFC5518
     http://www.iana.org/go/rfc5518.
 
+ x_archived_at
+
         my $header = $email->x_archived_at;
            $header = $email->x_archived_at('...');
 
     The x_archived_at method is a shortcut for getting and setting the
     X-Archived-At header. This header is described in more detail within
     RFC5064 http://www.iana.org/go/rfc5064.
+
+ x400_content_identifier
 
         my $header = $email->x400_content_identifier;
            $header = $email->x400_content_identifier('...');
@@ -1076,12 +1338,16 @@ OVERVIEW
     setting the X400-Content-Identifier header. This header is described in
     more detail within RFC4021 http://www.iana.org/go/rfc4021.
 
+ x400_content_return
+
         my $header = $email->x400_content_return;
            $header = $email->x400_content_return('...');
 
     The x400_content_return method is a shortcut for getting and setting
     the X400-Content-Return header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
+
+ x400_content_type
 
         my $header = $email->x400_content_type;
            $header = $email->x400_content_type('...');
@@ -1090,12 +1356,16 @@ OVERVIEW
     X400-Content-Type header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
 
+ x400_mts_identifier
+
         my $header = $email->x400_mts_identifier;
            $header = $email->x400_mts_identifier('...');
 
     The x400_mts_identifier method is a shortcut for getting and setting
     the X400-MTS-Identifier header. This header is described in more detail
     within RFC4021 http://www.iana.org/go/rfc4021.
+
+ x400_originator
 
         my $header = $email->x400_originator;
            $header = $email->x400_originator('...');
@@ -1104,12 +1374,16 @@ OVERVIEW
     X400-Originator header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ x400_received
+
         my $header = $email->x400_received;
            $header = $email->x400_received('...');
 
     The x400_received method is a shortcut for getting and setting the
     X400-Received header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
+
+ x400_recipients
 
         my $header = $email->x400_recipients;
            $header = $email->x400_recipients('...');
@@ -1118,6 +1392,8 @@ OVERVIEW
     X400-Recipients header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
+ x400_trace
+
         my $header = $email->x400_trace;
            $header = $email->x400_trace('...');
 
@@ -1125,540 +1401,22 @@ OVERVIEW
     X400-Trace header. This header is described in more detail within
     RFC4021 http://www.iana.org/go/rfc4021.
 
-POD ERRORS
+AUTHOR
 
-    Hey! The above document had some coding errors, which are explained
-    below:
+    Al Newkirk <anewkirk@ana.io>
 
-    Around line 156:
+CONTRIBUTORS
 
-      Unknown directive: =method
+      * Andrew Beverley <a.beverley@ctrlo.com>
 
-    Around line 165:
+      * Eric Johnson <eric.git@iijo.org>
 
-      Unknown directive: =method
+      * Stefan Hornburg <racke@linuxia.de>
 
-    Around line 174:
+COPYRIGHT AND LICENSE
 
-      Unknown directive: =method
+    This software is copyright (c) 2010 by Al Newkirk.
 
-    Around line 183:
-
-      Unknown directive: =method
-
-    Around line 192:
-
-      Unknown directive: =method
-
-    Around line 201:
-
-      Unknown directive: =method
-
-    Around line 210:
-
-      Unknown directive: =method
-
-    Around line 219:
-
-      Unknown directive: =method
-
-    Around line 228:
-
-      Unknown directive: =method
-
-    Around line 237:
-
-      Unknown directive: =method
-
-    Around line 246:
-
-      Unknown directive: =method
-
-    Around line 255:
-
-      Unknown directive: =method
-
-    Around line 264:
-
-      Unknown directive: =method
-
-    Around line 273:
-
-      Unknown directive: =method
-
-    Around line 282:
-
-      Unknown directive: =method
-
-    Around line 291:
-
-      Unknown directive: =method
-
-    Around line 300:
-
-      Unknown directive: =method
-
-    Around line 309:
-
-      Unknown directive: =method
-
-    Around line 318:
-
-      Unknown directive: =method
-
-    Around line 327:
-
-      Unknown directive: =method
-
-    Around line 336:
-
-      Unknown directive: =method
-
-    Around line 345:
-
-      Unknown directive: =method
-
-    Around line 354:
-
-      Unknown directive: =method
-
-    Around line 363:
-
-      Unknown directive: =method
-
-    Around line 372:
-
-      Unknown directive: =method
-
-    Around line 381:
-
-      Unknown directive: =method
-
-    Around line 391:
-
-      Unknown directive: =method
-
-    Around line 401:
-
-      Unknown directive: =method
-
-    Around line 411:
-
-      Unknown directive: =method
-
-    Around line 420:
-
-      Unknown directive: =method
-
-    Around line 430:
-
-      Unknown directive: =method
-
-    Around line 439:
-
-      Unknown directive: =method
-
-    Around line 449:
-
-      Unknown directive: =method
-
-    Around line 458:
-
-      Unknown directive: =method
-
-    Around line 467:
-
-      Unknown directive: =method
-
-    Around line 477:
-
-      Unknown directive: =method
-
-    Around line 486:
-
-      Unknown directive: =method
-
-    Around line 496:
-
-      Unknown directive: =method
-
-    Around line 506:
-
-      Unknown directive: =method
-
-    Around line 516:
-
-      Unknown directive: =method
-
-    Around line 526:
-
-      Unknown directive: =method
-
-    Around line 536:
-
-      Unknown directive: =method
-
-    Around line 546:
-
-      Unknown directive: =method
-
-    Around line 556:
-
-      Unknown directive: =method
-
-    Around line 566:
-
-      Unknown directive: =method
-
-    Around line 576:
-
-      Unknown directive: =method
-
-    Around line 586:
-
-      Unknown directive: =method
-
-    Around line 595:
-
-      Unknown directive: =method
-
-    Around line 604:
-
-      Unknown directive: =method
-
-    Around line 613:
-
-      Unknown directive: =method
-
-    Around line 622:
-
-      Unknown directive: =method
-
-    Around line 631:
-
-      Unknown directive: =method
-
-    Around line 640:
-
-      Unknown directive: =method
-
-    Around line 650:
-
-      Unknown directive: =method
-
-    Around line 659:
-
-      Unknown directive: =method
-
-    Around line 666:
-
-      Unknown directive: =method
-
-    Around line 675:
-
-      Unknown directive: =method
-
-    Around line 684:
-
-      Unknown directive: =method
-
-    Around line 693:
-
-      Unknown directive: =method
-
-    Around line 702:
-
-      Unknown directive: =method
-
-    Around line 711:
-
-      Unknown directive: =method
-
-    Around line 720:
-
-      Unknown directive: =method
-
-    Around line 729:
-
-      Unknown directive: =method
-
-    Around line 738:
-
-      Unknown directive: =method
-
-    Around line 747:
-
-      Unknown directive: =method
-
-    Around line 756:
-
-      Unknown directive: =method
-
-    Around line 765:
-
-      Unknown directive: =method
-
-    Around line 774:
-
-      Unknown directive: =method
-
-    Around line 783:
-
-      Unknown directive: =method
-
-    Around line 792:
-
-      Unknown directive: =method
-
-    Around line 802:
-
-      Unknown directive: =method
-
-    Around line 812:
-
-      Unknown directive: =method
-
-    Around line 822:
-
-      Unknown directive: =method
-
-    Around line 832:
-
-      Unknown directive: =method
-
-    Around line 842:
-
-      Unknown directive: =method
-
-    Around line 852:
-
-      Unknown directive: =method
-
-    Around line 862:
-
-      Unknown directive: =method
-
-    Around line 872:
-
-      Unknown directive: =method
-
-    Around line 882:
-
-      Unknown directive: =method
-
-    Around line 892:
-
-      Unknown directive: =method
-
-    Around line 902:
-
-      Unknown directive: =method
-
-    Around line 912:
-
-      Unknown directive: =method
-
-    Around line 922:
-
-      Unknown directive: =method
-
-    Around line 932:
-
-      Unknown directive: =method
-
-    Around line 941:
-
-      Unknown directive: =method
-
-    Around line 953:
-
-      Unknown directive: =method
-
-    Around line 962:
-
-      Unknown directive: =method
-
-    Around line 971:
-
-      Unknown directive: =method
-
-    Around line 980:
-
-      Unknown directive: =method
-
-    Around line 989:
-
-      Unknown directive: =method
-
-    Around line 998:
-
-      Unknown directive: =method
-
-    Around line 1007:
-
-      Unknown directive: =method
-
-    Around line 1016:
-
-      Unknown directive: =method
-
-    Around line 1026:
-
-      Unknown directive: =method
-
-    Around line 1035:
-
-      Unknown directive: =method
-
-    Around line 1044:
-
-      Unknown directive: =method
-
-    Around line 1053:
-
-      Unknown directive: =method
-
-    Around line 1062:
-
-      Unknown directive: =method
-
-    Around line 1071:
-
-      Unknown directive: =method
-
-    Around line 1080:
-
-      Unknown directive: =method
-
-    Around line 1090:
-
-      Unknown directive: =method
-
-    Around line 1099:
-
-      Unknown directive: =method
-
-    Around line 1108:
-
-      Unknown directive: =method
-
-    Around line 1117:
-
-      Unknown directive: =method
-
-    Around line 1126:
-
-      Unknown directive: =method
-
-    Around line 1135:
-
-      Unknown directive: =method
-
-    Around line 1144:
-
-      Unknown directive: =method
-
-    Around line 1153:
-
-      Unknown directive: =method
-
-    Around line 1162:
-
-      Unknown directive: =method
-
-    Around line 1172:
-
-      Unknown directive: =method
-
-    Around line 1181:
-
-      Unknown directive: =method
-
-    Around line 1190:
-
-      Unknown directive: =method
-
-    Around line 1200:
-
-      Unknown directive: =method
-
-    Around line 1209:
-
-      Unknown directive: =method
-
-    Around line 1218:
-
-      Unknown directive: =method
-
-    Around line 1227:
-
-      Unknown directive: =method
-
-    Around line 1236:
-
-      Unknown directive: =method
-
-    Around line 1243:
-
-      Unknown directive: =method
-
-    Around line 1253:
-
-      Unknown directive: =method
-
-    Around line 1262:
-
-      Unknown directive: =method
-
-    Around line 1271:
-
-      Unknown directive: =method
-
-    Around line 1280:
-
-      Unknown directive: =method
-
-    Around line 1289:
-
-      Unknown directive: =method
-
-    Around line 1298:
-
-      Unknown directive: =method
-
-    Around line 1307:
-
-      Unknown directive: =method
-
-    Around line 1316:
-
-      Unknown directive: =method
-
-    Around line 1325:
-
-      Unknown directive: =method
-
-    Around line 1334:
-
-      Unknown directive: =method
-
-    Around line 1343:
-
-      Unknown directive: =method
-
-    Around line 1352:
-
-      Unknown directive: =method
-
-    Around line 1361:
-
-      Unknown directive: =method
-
-    Around line 1370:
-
-      Unknown directive: =method
-
-    Around line 1379:
-
-      Unknown directive: =method
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
 
