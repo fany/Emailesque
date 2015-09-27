@@ -1,6 +1,7 @@
 Changelog for Emailesque
 
-1.25 2015-09-27T13:57:03
+1.25 2015-09-27T13:57:23
+ - Updated build.
  - Fixed constructor-args support.
 
 1.24 2015-09-27T13:21:07
