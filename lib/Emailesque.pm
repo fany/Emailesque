@@ -7,11 +7,12 @@ use Email::AddressParser;
 use Email::Sender::Transport::Sendmail;
 use Email::Sender::Transport::SMTP;
 use Email::Stuffer;
+use Hash::Merge::Simple;
 
 use Exporter 'import';
 our @EXPORT_OK = qw(email);
 
-use parent 'Data::Object::Hash';
+use Moo;
 
 # VERSION
 
@@ -215,8 +216,8 @@ sub email {
 }
 
 sub message {
-    my ($self, @arguments) = @_;
-    return $self->set('message', @arguments);
+    my ($self, $argument) = @_;
+    return $self->{message} = $argument;
 }
 
 sub send {
@@ -879,53 +880,50 @@ sub header {
     my ($self, $name) = (shift, shift);
     $name = $headers{$name} // $name;
 
-    my $headers = $self->get('headers');
-       $headers = $self->set('headers' => {}) if not $headers;
+    my $headers = $self->{headers} //= {};
 
-    return $headers->set($name => shift) if @_;
-    return $headers->get($name);
+    return $headers->{$name} = shift if @_;
+    return $headers->{$name};
 }
 
 sub prepare_address {
     my ($self, $field, @arguments) = @_;
 
-    my $headers = $self->get('headers');
-       $headers = $self->set('headers' => {}) if not $headers;
-    my $value   = $headers->get($field);
+    my $headers = $self->{headers} //= {};
+    my $value   = $headers->{$field};
 
     return join ",", map $_->format, Email::AddressParser->parse(
-        $value->isa('Data::Object::Array')
-            ? $value->join(',')->data
-            : $value->data
+        ref($value) eq 'ARRAY' ? join(',',@{$value}) : $value
     );
 }
 
 sub prepare_package {
     my ($self, $options, @arguments) = @_;
 
-    $options = $self->merge($options // {});
+    $options = Hash::Merge::Simple::merge($self, $options // {});
 
-    my $stuff   = Email::Stuffer->new;
-    my $email   = $self->new($options->data);
+    my $stuff = Email::Stuffer->new;
+    my $email = __PACKAGE__->new();
+
+    $email->{$_} = $options->{$_} for keys %{$options};
 
     # remap references
     $_[0] = $self = $email;
 
     # configure headers
-    my $headers = $email->get('headers');
-       $headers = $email->set('headers' => {}) if not $headers;
+    my $headers = $email->{headers} //= {};
 
     # extract headers
     for my $key (keys %headers) {
         my $name  = $headers{$key};
-        my $value = $email->delete($key) or next;
-        $headers->set($name, $value) if $name and not $headers->defined($name);
+        my $value = delete $email->{$key} or next;
+        $headers->{$name} = $value if $name and not defined $headers->{$name};
     }
 
     # required fields
-    my $required = $headers->filter_include(qw(From Subject To));
+    my @required = @{$headers}{qw(From Subject To)};
     confess "Can't send email without a to, from, and subject property"
-        unless $required->values->count == 3;
+        unless @required == 3;
 
     # process address headers
     my @address_headers = qw(
@@ -945,19 +943,21 @@ sub prepare_package {
     );
     for my $key (qw(Cc Bcc From Reply-To To), @address_headers) {
         $stuff->header($key => $email->prepare_address($key))
-            if $headers->defined($key)
+            if defined $headers->{$key};
     }
 
     # process subject
-    $stuff->subject($headers->get('Subject')->data)
-        if $headers->defined('Subject');
+    $stuff->subject($headers->{Subject}) if defined $headers->{Subject};
 
     # process message
-    if ($email->defined('message')) {
-        my $type     = $email->get('type');
-        my $message  = $email->get('message');
-        my $html_msg = $email->lookup('message.html');
-        my $text_msg = $email->lookup('message.text');
+    if (defined $email->{message}) {
+        my $type     = $email->{type};
+        my $message  = $email->{message};
+
+        my $multi = ref($email->{message}) eq 'HASH';
+
+        my $html_msg = $email->{message}{html} if $multi;
+        my $text_msg = $email->{message}{text} if $multi;
 
         # multipart send using plain text and html
         if (($type and lc($type) eq 'multi') or ($html_msg and $text_msg)) {
@@ -975,7 +975,7 @@ sub prepare_package {
     }
 
     confess "Can't send email without a message property"
-        unless $email->defined('message');
+        unless defined $email->{message};
 
     # process additional headers
     my %excluded_headers = map { $_ => 1 } @address_headers, qw(
@@ -987,14 +987,14 @@ sub prepare_package {
         To
     );
     for my $key (grep { !$excluded_headers{$_} } @headers) {
-        $stuff->header($key => $headers->get($key)->data)
-            if $headers->defined($key)
+        $stuff->header($key => $headers->{$key})
+            if defined $headers->{$key}
     }
 
     # process attachments - old behavior
-    if (my $attachments = $email->get('attach')) {
-        if ($attachments->isa('Data::Object::Array')) {
-            my %files = ($attachments->list);
+    if (my $attachments = $email->{attach}) {
+        if (ref($attachments) eq 'ARRAY') {
+            my %files = @{$attachments};
             foreach my $file (keys %files) {
                 if ($files{$file}) {
                     my $data = read_file($files{$file}, binmode => ':raw');
@@ -1006,10 +1006,11 @@ sub prepare_package {
             }
         }
     }
+
     # process attachments - new behavior
-    if (my $attachments = $email->get('files')) {
-        if ($attachments->isa('Data::Object::Array')) {
-            $stuff->attach_file($_->data) for ($attachments->list);
+    if (my $attachments = $email->{files}) {
+        if (ref($attachments) eq 'ARRAY') {
+            $stuff->attach_file($_) for @{$attachments};
         }
     }
 
@@ -1018,7 +1019,7 @@ sub prepare_package {
     return $stuff if @arguments;
 
     # transport email implicitly
-    my $driver   = $email->get('driver')->data;
+    my $driver   = $email->{driver};
     my $sendmail = lc($driver) eq 'sendmail';
     my $smtpmail = lc($driver) eq 'smtp';
 
@@ -1026,7 +1027,7 @@ sub prepare_package {
     $sendmail = 1 unless $sendmail or $smtpmail;
 
     if ($sendmail) {
-        my $path = $email->get('path')->data;
+        my $path = $email->{path};
 
         $path ||= '/usr/bin/sendmail'  if -f '/usr/bin/sendmail';
         $path ||= '/usr/sbin/sendmail' if -f '/usr/sbin/sendmail';
@@ -1052,8 +1053,8 @@ sub prepare_package {
         my @params = ();
 
         for my $key (@keys) {
-            push @params, $map{$key} // $key, $email->get($key)->data
-                if $email->defined($key);
+            push @params, $map{$key} // $key, $email->{$key}
+                if defined $email->{$key};
         }
 
         push @params, 'proto' => 'tcp'; # no longer used

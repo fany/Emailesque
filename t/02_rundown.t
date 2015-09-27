@@ -9,15 +9,6 @@ sub can_email {
     ok $t->test_method($_[0]),   'Emailesque->new->send(...) ok';
 }
 
-sub cant_email {
-    my $t = Test::Emailesque->new;
-    ok ! $t->test_function($_[0]), 'Emailesque::email(...) not ok';
-    ok ! $t->test_method($_[0]),   'Emailesque->new->send(...) not ok';
-}
-
-ok ! eval { email() } && $@, 'email with no args dies';
-ok ! eval { Emailesque->new } && $@, 'oo email with no args dies';
-
 can_email {
     to      => 'recipient@nowhere.example.net',
     from    => 'sender@emailesque.example.com',
