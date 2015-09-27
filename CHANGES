@@ -1,6 +1,10 @@
 Changelog for Emailesque
 
-1.24 2015-09-27T13:20:55
+1.25 2015-09-27T13:57:03
+ - Fixed constructor-args support.
+
+1.24 2015-09-27T13:21:07
+ - v1.24
  - Updated build.
  - Removed Data::Object dependency, added Moo and Hash::Merge::Simple.
 
