@@ -1104,13 +1104,13 @@ The following is an example of the object-oriented interface:
 
     use Emailesque;
 
-    my $email = Emailesque->new({
+    my $email = Emailesque->new(
         to      => '...',
         from    => '...',
         subject => '...',
         message => '...',
         files   => [ '/path/to/file/1', '/path/to/file/2' ],
-    });
+    );
 
     my $result = $email->send;
 
@@ -1126,13 +1126,13 @@ following is an example of that:
 
     use Emailesque;
 
-    my $email = Emailesque->new({
+    my $email = Emailesque->new(
         from     => '...',
         subject  => '...',
         x_mailer => "MyApp-Newletter 0.019876",
         x_url    => "https://mail.to/u/123/welcome",
         type     => 'text',
-    });
+    );
 
     for my $user (@users) {
         my $message = msg_generation $user;
