@@ -211,6 +211,15 @@ my @headers = (
     ),
 );
 
+around new => sub {
+    my ($orig, $class, @args) = @_;
+    my $data = @args % 2 ? $args[0] : {@args};
+    $data = {} unless ref($data) eq 'HASH';
+    my $self = $class->$orig($data);
+    $self->{$_} //= $data->{$_} for keys %{$data};
+    return $self;
+};
+
 sub email {
     unshift @_, __PACKAGE__->new({}) and goto &send;
 }
@@ -899,7 +908,7 @@ sub prepare_address {
 
 sub prepare_package {
     my ($self, $options, @arguments) = @_;
-
+$DB::single=1;
     $options = Hash::Merge::Simple::merge($self, $options // {});
 
     my $stuff = Email::Stuffer->new;

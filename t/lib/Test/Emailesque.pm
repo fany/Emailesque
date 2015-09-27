@@ -23,4 +23,11 @@ sub test_method {
     return ref($result) =~ /success/i;
 }
 
+sub test_construction {
+    my ($self, $data) = @_;
+
+    my $result = Emailesque->new($data)->send({}, 'Test');
+    return ref($result) =~ /success/i;
+}
+
 1;
