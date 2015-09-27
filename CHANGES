@@ -1,6 +1,10 @@
 Changelog for Emailesque
 
-1.23 2015-04-03T23:53:40
+1.24 2015-09-27T13:20:15
+ - Removed Data::Object dependency, added Moo and Hash::Merge::Simple.
+
+1.23 2015-04-03T23:53:49
+ - v1.23
  - Updated build.
  - Fixed default transport, Updated documentation.
 
@@ -67,4 +71,3 @@ Changelog for Emailesque
  - configuration hashref parameter typo
  - initial stable release
  - initial commit
-
