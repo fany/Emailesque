@@ -942,7 +942,6 @@ $DB::single=1;
         Disposition-Notification-To
         Errors-To
         Followup-To
-        In-Reply-To
         Mail-Copies-To
         Posted-To
         Read-Receipt-To
